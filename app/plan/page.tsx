@@ -1,37 +1,45 @@
 "use client";
+import { BottomGradient, VanishInput } from "@/components/ui";
 import React from "react";
-import {
-  Label,
-  Input,
-  BottomGradient,
-  LabelInputContainer,
-} from "@/components/ui";
 
-function SignupFormDemo() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+function Plan() {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted");
+    const planData = (new FormData(e.currentTarget)).get("plan") as string;
+    console.log(planData);
+    const response = await fetch("/api/plan", {
+      method: "POST",
+      body: JSON.stringify({ plan: planData }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    console.log(data);
   };
+  const placeholders = [
+    "Create a plan to build a house",
+    "How to develop a mobile game",
+    "Increase the revenue of a business",
+  ];
   return (
-    <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
-      <form className="my-8" onSubmit={handleSubmit}>
-        <LabelInputContainer className="mb-4">
-          <Label htmlFor="plan">Plan</Label>
-          <Input id="plan" placeholder="Enter your plan" type="email" />
-        </LabelInputContainer>
+    <div className="max-w-xl w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
+      <div className="h-[20vh] flex flex-col justify-center  items-center px-4">
+        <h2 className="mb-2 sm:mb-20 text-xl text-center sm:text-5xl dark:text-white text-black">
+          Share your Plan
+        </h2>
+      </div>
+      <VanishInput
+        placeholders={placeholders}
+        onChange={handleChange}
+        onSubmit={onSubmit}
+        name="plan"
+      />
 
-        <button
-          className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
-          type="submit"
-        >
-          Generate
-          <BottomGradient />
-        </button>
-
-        <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
-      </form>
+      <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
     </div>
   );
 }
 
-export default SignupFormDemo;
+export default Plan;
