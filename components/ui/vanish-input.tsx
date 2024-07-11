@@ -139,6 +139,13 @@ export function VanishInput({
     if (e.key === "Enter" && !animating) {
       vanishAndSubmit();
     }
+    if (e.key === "Escape") {
+      setValue("");
+    }
+    if (e.key === "Tab") {
+      e.preventDefault();
+      setValue(placeholders[currentPlaceholder]);
+    }
   };
 
   const vanishAndSubmit = () => {
@@ -163,7 +170,10 @@ export function VanishInput({
   return (
     <form
       className={cn(
-        "w-full border-solid border-2 border-sky-800 dark:border-sky-500 relative max-w-xl mx-auto bg-white dark:bg-zinc-800 h-12 rounded-full overflow-hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),_0px_1px_0px_0px_rgba(25,28,33,0.02),_0px_0px_0px_1px_rgba(25,28,33,0.08)] transition duration-200",
+        `w-full border-solid border-2 border-sky-800 dark:border-sky-500 relative  mx-auto
+         bg-white dark:bg-zinc-800 h-12 rounded-xl overflow-hidden 
+         shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),_0px_1px_0px_0px_rgba(25,28,33,0.02),_0px_0px_0px_1px_rgba(25,28,33,0.08)] 
+         transition duration-200`,
         value && "bg-gray-50"
       )}
       onSubmit={handleSubmit}
@@ -182,6 +192,7 @@ export function VanishInput({
             onChange && onChange(e);
           }
         }}
+        autoComplete="off"
         onKeyDown={handleKeyDown}
         ref={inputRef}
         value={value}
@@ -222,6 +233,7 @@ export function VanishInput({
             }}
             transition={{
               duration: 0.3,
+              delay: 0.2,
               ease: "linear",
             }}
           />
@@ -230,7 +242,7 @@ export function VanishInput({
         </motion.svg>
       </button>
 
-      <div className="absolute inset-0 flex items-center rounded-full pointer-events-none">
+      <div className="absolute -left-2 right-0 top-0 bottom-0 flex items-center rounded-full pointer-events-none">
         <AnimatePresence mode="wait">
           {!value && (
             <motion.p
