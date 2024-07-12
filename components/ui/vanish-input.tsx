@@ -1,21 +1,28 @@
-"use client";
+'use client';
 
-import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { cn } from "@/utils/cn";
+import { AnimatePresence, motion } from 'framer-motion';
+import { use, useCallback, useEffect, useRef, useState } from 'react';
+import { cn } from '@/utils/cn';
 
 export function VanishInput({
   placeholders,
   onChange,
   onSubmit,
-  name = "vanish-input",
+  name = 'vanish-input',
+  chatHistory,
 }: {
   placeholders: string[];
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   name?: string;
+  chatHistory: string[];
 }) {
   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(chatHistory.length - 1);
+
+  useEffect(() => {
+    setCurrentIndex(chatHistory.length - 1);
+  }, [chatHistory]);
 
   useEffect(() => {
     let interval: any;
@@ -31,14 +38,14 @@ export function VanishInput({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const newDataRef = useRef<any[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const [animating, setAnimating] = useState(false);
 
   const draw = useCallback(() => {
     if (!inputRef.current) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     canvas.width = 800;
@@ -46,9 +53,9 @@ export function VanishInput({
     ctx.clearRect(0, 0, 800, 800);
     const computedStyles = getComputedStyle(inputRef.current);
 
-    const fontSize = parseFloat(computedStyles.getPropertyValue("font-size"));
+    const fontSize = parseFloat(computedStyles.getPropertyValue('font-size'));
     ctx.font = `${fontSize * 2}px ${computedStyles.fontFamily}`;
-    ctx.fillStyle = "#FFF";
+    ctx.fillStyle = '#FFF';
     ctx.fillText(value, 16, 40);
 
     const imageData = ctx.getImageData(0, 0, 800, 800);
@@ -110,7 +117,7 @@ export function VanishInput({
           }
         }
         newDataRef.current = newArr;
-        const ctx = canvasRef.current?.getContext("2d");
+        const ctx = canvasRef.current?.getContext('2d');
         if (ctx) {
           ctx.clearRect(pos, 0, 800, 800);
           newDataRef.current.forEach((t) => {
@@ -127,7 +134,7 @@ export function VanishInput({
         if (newDataRef.current.length > 0) {
           animateFrame(pos - 8);
         } else {
-          setValue("");
+          setValue('');
           setAnimating(false);
         }
       });
@@ -136,15 +143,27 @@ export function VanishInput({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && !animating) {
+    if (e.key === 'Enter' && !animating) {
       vanishAndSubmit();
     }
-    if (e.key === "Escape") {
-      setValue("");
+    if (e.key === 'Escape') {
+      setValue('');
     }
-    if (e.key === "Tab") {
+    if (e.key === 'Tab') {
       e.preventDefault();
       setValue(placeholders[currentPlaceholder]);
+    }
+    if (e.key === 'ArrowUp') {
+      if (currentIndex >= 1) {
+        setValue(chatHistory[currentIndex - 1]);
+        setCurrentIndex((currentIndex) => currentIndex - 1);
+      }
+    }
+    if (e.key === 'ArrowDown') {
+      if (currentIndex < chatHistory.length - 1) {
+        setValue(chatHistory[currentIndex + 1]);
+        setCurrentIndex((currentIndex) => currentIndex + 1);
+      }
     }
   };
 
@@ -152,7 +171,7 @@ export function VanishInput({
     setAnimating(true);
     draw();
 
-    const value = inputRef.current?.value || "";
+    const value = inputRef.current?.value || '';
     if (value && inputRef.current) {
       const maxX = newDataRef.current.reduce(
         (prev, current) => (current.x > prev ? current.x : prev),
@@ -170,18 +189,15 @@ export function VanishInput({
   return (
     <form
       className={cn(
-        `w-full border-solid border-2 border-sky-800 dark:border-sky-500 relative  mx-auto
-         bg-white dark:bg-zinc-800 h-12 rounded-xl overflow-hidden 
-         shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),_0px_1px_0px_0px_rgba(25,28,33,0.02),_0px_0px_0px_1px_rgba(25,28,33,0.08)] 
-         transition duration-200`,
-        value && "bg-gray-50"
+        `relative mx-auto h-12 w-full overflow-hidden rounded-xl border-2 border-solid border-sky-800 bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),_0px_1px_0px_0px_rgba(25,28,33,0.02),_0px_0px_0px_1px_rgba(25,28,33,0.08)] transition duration-200 dark:border-sky-500 dark:bg-zinc-800`,
+        value && 'bg-gray-50'
       )}
       onSubmit={handleSubmit}
     >
       <canvas
         className={cn(
-          "absolute pointer-events-none  text-base transform scale-50 top-[20%] left-2 sm:left-8 origin-top-left filter invert dark:invert-0 pr-20",
-          !animating ? "opacity-0" : "opacity-100"
+          'pointer-events-none absolute left-2 top-[20%] origin-top-left scale-50 transform pr-20 text-base invert filter dark:invert-0 sm:left-8',
+          !animating ? 'opacity-0' : 'opacity-100'
         )}
         ref={canvasRef}
       />
@@ -192,58 +208,58 @@ export function VanishInput({
             onChange && onChange(e);
           }
         }}
-        autoComplete="off"
+        autoComplete='off'
         onKeyDown={handleKeyDown}
         ref={inputRef}
         value={value}
-        type="text"
+        type='text'
         name={name}
         className={cn(
-          "w-full relative text-sm sm:text-base z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-4 sm:pl-10 pr-20",
-          animating && "text-transparent dark:text-transparent"
+          'relative z-50 h-full w-full rounded-full border-none bg-transparent pl-4 pr-20 text-sm text-black focus:outline-none focus:ring-0 dark:text-white sm:pl-10 sm:text-base',
+          animating && 'text-transparent dark:text-transparent'
         )}
       />
 
       <button
         disabled={!value}
-        type="submit"
-        className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full disabled:bg-gray-100 bg-black dark:bg-zinc-900 dark:disabled:bg-zinc-800 transition duration-200 flex items-center justify-center"
+        type='submit'
+        className='absolute right-2 top-1/2 z-50 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black transition duration-200 disabled:bg-gray-100 dark:bg-zinc-900 dark:disabled:bg-zinc-800'
       >
         <motion.svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="text-gray-300 h-4 w-4"
+          xmlns='http://www.w3.org/2000/svg'
+          width='24'
+          height='24'
+          viewBox='0 0 24 24'
+          fill='none'
+          stroke='currentColor'
+          strokeWidth='2'
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          className='h-4 w-4 text-gray-300'
         >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path stroke='none' d='M0 0h24v24H0z' fill='none' />
           <motion.path
-            d="M5 12l14 0"
+            d='M5 12l14 0'
             initial={{
-              strokeDasharray: "50%",
-              strokeDashoffset: "50%",
+              strokeDasharray: '50%',
+              strokeDashoffset: '50%',
             }}
             animate={{
-              strokeDashoffset: value ? 0 : "50%",
+              strokeDashoffset: value ? 0 : '50%',
             }}
             transition={{
               duration: 0.3,
               delay: 0.2,
-              ease: "linear",
+              ease: 'linear',
             }}
           />
-          <path d="M13 18l6 -6" />
-          <path d="M13 6l6 6" />
+          <path d='M13 18l6 -6' />
+          <path d='M13 6l6 6' />
         </motion.svg>
       </button>
 
-      <div className="absolute -left-2 right-0 top-0 bottom-0 flex items-center rounded-full pointer-events-none">
-        <AnimatePresence mode="wait">
+      <div className='pointer-events-none absolute -left-2 bottom-0 right-0 top-0 flex items-center rounded-full'>
+        <AnimatePresence mode='wait'>
           {!value && (
             <motion.p
               initial={{
@@ -261,9 +277,9 @@ export function VanishInput({
               }}
               transition={{
                 duration: 0.3,
-                ease: "linear",
+                ease: 'linear',
               }}
-              className="dark:text-zinc-500 text-sm sm:text-base font-normal text-neutral-500 pl-4 sm:pl-12 text-left w-[calc(100%-2rem)] truncate"
+              className='w-[calc(100%-2rem)] truncate pl-4 text-left text-sm font-normal text-neutral-500 dark:text-zinc-500 sm:pl-12 sm:text-base'
             >
               {placeholders[currentPlaceholder]}
             </motion.p>

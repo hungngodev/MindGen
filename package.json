@@ -18,6 +18,7 @@
     "@nextui-org/react": "^2.4.2",
     "@radix-ui/react-label": "^2.1.0",
     "@tabler/icons-react": "^3.7.0",
+    "@tanstack/react-query": "^5.51.1",
     "@types/node": "20.1.4",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
@@ -28,10 +29,14 @@
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
     "framer-motion": "^11.3.0",
+    "konva": "^9.3.13",
     "next": "13.4.3",
+    "plantuml-encoder": "^1.4.0",
+    "plantuml-parser": "^0.4.0",
     "postcss": "8.4.23",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-konva": "^18.2.10",
     "tailwind-merge": "^2.3.0",
     "tailwindcss": "^3.4.4",
     "typescript": "5.0.4"
@@ -40,6 +45,7 @@
     "node": ">=18.x"
   },
   "devDependencies": {
+    "@types/plantuml-encoder": "^1.4.2",
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5"
