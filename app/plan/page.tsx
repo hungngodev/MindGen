@@ -1,7 +1,9 @@
 'use client';
+import logo from '@/assets/images/logo.png';
+import user from '@/assets/images/user.png';
 import { VanishInput } from '@/components/ui';
 import { cn } from '@/utils/cn';
-import { Avatar, Spinner } from '@nextui-org/react';
+import { Spinner } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
 import {
   AnimatePresence,
@@ -10,8 +12,8 @@ import {
   useScroll,
 } from 'framer-motion';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import React, { useEffect } from 'react';
-import { parsePlanUML } from '@/utils/diagram-parser';
 
 const ExcalidrawWrapper = dynamic(
   async () => (await import('@/components/excalidraw')).default,
@@ -40,27 +42,29 @@ interface ChatBubble {
 function Plan() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
   const messagesEndRef = React.useRef<null | HTMLDivElement>(null);
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
   const messageContainerRef = React.useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ container: messageContainerRef });
   const [botThinking, setBotThinking] = React.useState(false);
   const [buttonToScroll, setButtonToScroll] = React.useState(false);
-  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    setButtonToScroll(latest < 0.6);
-  });
   const { data, status } = useQuery(chatHistoryQuery);
   const [mindMapData, setMindMapData] = React.useState<string>('');
-
   const [chat, setChat] = React.useState<ChatBubble[]>(
     status === 'success' ? data.history : []
   );
 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    setButtonToScroll(latest < 0.6);
+  });
+
   useEffect(() => {
     if (status === 'success') {
       setChat(data.history);
-      setMindMapData(data.history[data.history.length - 1].content);
+      if (data.history.length > 0)
+        setMindMapData(data.history[data.history.length - 1].content);
     }
   }, [status]);
 
@@ -88,12 +92,30 @@ function Plan() {
     setChat([...newChat, { content: data.message, role: 'bot' }]);
     setBotThinking(false);
     setMindMapData(data.message);
-    console.log(parsePlanUML(data.message));
   };
+
   const placeholders = [
     'Create a plan to build a house',
     'How to develop a mobile game',
     'Increase the revenue of a business',
+    'Design an effective marketing strategy',
+    'Develop a successful e-commerce website',
+    'How to start a tech startup',
+    'Create a project management plan',
+    'Improve customer satisfaction and retention',
+    'Develop a mobile app for a business',
+    'Strategies for successful business expansion',
+    'Create a financial plan for a new venture',
+    'How to conduct market research',
+    'Build a brand identity for a business',
+    'Develop a user-friendly web application',
+    'How to secure funding for a startup',
+    'Optimize business operations for efficiency',
+    'How to build a strong online presence',
+    'Create a content marketing plan',
+    'Design a user interface for a product',
+    'How to manage a remote team effectively',
+    'Develop a business plan for a new product',
   ];
 
   return (
@@ -168,16 +190,14 @@ function Plan() {
                   damping: 20,
                 }}
                 className={cn(
-                  `mb-5 flex w-full gap-3`,
+                  `mb-5 flex w-full items-end gap-3`,
                   chat.role === 'user' ? 'flex-row-reverse' : 'flex-row'
                 )}
               >
-                <Avatar
-                  src={
-                    chat.role === 'user'
-                      ? 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745'
-                      : 'https://play-lh.googleusercontent.com/YB1h4DpRYgiPb1OmdvtEecfOaUtRTvUAk2bvqjq_v3IqF698O25vm2eKr_pgFeGYpA'
-                  }
+                <Image
+                  src={chat.role === 'user' ? user : logo}
+                  alt='avatar'
+                  className='h-[50px] w-[50px] rounded-full'
                 />
                 <div
                   className={cn(
@@ -213,7 +233,7 @@ function Plan() {
           onSubmit={onSubmit}
           name='plan'
         />
-        <ExcalidrawWrapper />
+        <ExcalidrawWrapper mindmapData={mindMapData} />
       </div>
     </div>
   );
