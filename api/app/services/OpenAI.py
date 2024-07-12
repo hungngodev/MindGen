@@ -16,6 +16,7 @@ system ={
     """ 
     
 }
+
 async def planGenerated(planData):
     response =  client.chat.completions.create(
         model="gpt-4o",

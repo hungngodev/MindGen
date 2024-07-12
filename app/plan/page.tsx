@@ -9,11 +9,16 @@ import {
   useMotionValueEvent,
   useScroll,
 } from 'framer-motion';
-import plantumlEncoder from 'plantuml-encoder';
-import React, { useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import React, { useEffect } from 'react';
+import { parsePlanUML } from '@/utils/diagram-parser';
 
-const Canvas = dynamic(() => import('@/components/canvas'), { ssr: false });
+const ExcalidrawWrapper = dynamic(
+  async () => (await import('@/components/excalidraw')).default,
+  {
+    ssr: false,
+  }
+);
 
 const chatHistoryQuery = {
   queryKey: ['chatHistory'],
@@ -42,11 +47,11 @@ function Plan() {
   const { scrollYProgress } = useScroll({ container: messageContainerRef });
   const [botThinking, setBotThinking] = React.useState(false);
   const [buttonToScroll, setButtonToScroll] = React.useState(false);
-  const [image, setImage] = React.useState<HTMLImageElement | null>(null);
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     setButtonToScroll(latest < 0.6);
   });
   const { data, status } = useQuery(chatHistoryQuery);
+  const [mindMapData, setMindMapData] = React.useState<string>('');
 
   const [chat, setChat] = React.useState<ChatBubble[]>(
     status === 'success' ? data.history : []
@@ -55,6 +60,7 @@ function Plan() {
   useEffect(() => {
     if (status === 'success') {
       setChat(data.history);
+      setMindMapData(data.history[data.history.length - 1].content);
     }
   }, [status]);
 
@@ -81,22 +87,15 @@ function Plan() {
     const data = await response.json();
     setChat([...newChat, { content: data.message, role: 'bot' }]);
     setBotThinking(false);
-    const encoded = plantumlEncoder.encode(data.message);
-
-    const url = `http://www.plantuml.com/plantuml/svg/${encoded}`;
-    console.log(url);
-    const img = new window.Image();
-    img.crossOrigin = 'Anonymous';
-    img.src = url;
-    img.onload = () => {
-      setImage(img);
-    };
+    setMindMapData(data.message);
+    console.log(parsePlanUML(data.message));
   };
   const placeholders = [
     'Create a plan to build a house',
     'How to develop a mobile game',
     'Increase the revenue of a business',
   ];
+
   return (
     <div className='mx-auto w-[80vw] rounded-none bg-white p-4 shadow-input dark:bg-black md:rounded-2xl md:p-8'>
       <div className='flex h-[20vh] flex-col items-center justify-center px-4'>
@@ -214,10 +213,19 @@ function Plan() {
           onSubmit={onSubmit}
           name='plan'
         />
-        <Canvas image={image} />
+        <ExcalidrawWrapper />
       </div>
     </div>
   );
 }
 
 export default Plan;
+
+// const url = `http://www.plantuml.com/plantuml/svg/${encoded}`;
+// console.log(url);
+// const img = new window.Image();
+// img.crossOrigin = 'Anonymous';
+// img.src = url;
+// img.onload = () => {
+//   setMindMapData(img);
+// };
