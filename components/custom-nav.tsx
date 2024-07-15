@@ -12,12 +12,16 @@ import {
   DropdownMenu,
   Avatar,
   Switch,
+  Spinner,
 } from '@nextui-org/react';
 import VNGLogo from '@/public/logoVNG.png';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { Moon, Sun } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
+import { stat } from 'fs';
 
 export default function CustomNav() {
   const currentPath = usePathname();
@@ -35,6 +39,8 @@ export default function CustomNav() {
       name: 'My Saved Plans',
     },
   };
+  const { data: session, status } = useSession();
+  console.log(status);
 
   return (
     <Navbar className='w-full bg-slate-200 shadow-lg dark:bg-zinc-800'>
@@ -70,34 +76,41 @@ export default function CustomNav() {
           }
           onChange={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
         ></Switch>
-        <Dropdown placement='bottom-end'>
-          <DropdownTrigger>
-            <Avatar
-              isBordered
-              as='button'
-              className='transition-transform'
-              color='secondary'
-              name='Jason Hughes'
-              size='sm'
-              src='https://i.pravatar.cc/150?u=a042581f4e29026704d'
-            />
-          </DropdownTrigger>
-          <DropdownMenu aria-label='Profile Actions' variant='flat'>
-            <DropdownItem key='profile' className='h-14 gap-2'>
-              <p className='font-semibold'>Signed in as</p>
-              <p className='font-semibold'>zoey@example.com</p>
-            </DropdownItem>
-            <DropdownItem key='settings'>My Settings</DropdownItem>
-            <DropdownItem key='team_settings'>Team Settings</DropdownItem>
-            <DropdownItem key='analytics'>Analytics</DropdownItem>
-            <DropdownItem key='system'>System</DropdownItem>
-            <DropdownItem key='configurations'>Configurations</DropdownItem>
-            <DropdownItem key='help_and_feedback'>Help & Feedback</DropdownItem>
-            <DropdownItem key='logout' color='danger'>
-              Log Out
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+
+        {status === 'loading' ? (
+          <NavbarItem className=''>
+            <Spinner color='primary' size='lg' />
+          </NavbarItem>
+        ) : status === 'authenticated' ? (
+          <Dropdown placement='bottom-end'>
+            <DropdownTrigger>
+              <Image
+                src={session.user?.image as string}
+                alt='User Avatar'
+                width={40}
+                height={40}
+                className='rounded-full border-2 border-primary-500 dark:border-primary-400'
+              />
+            </DropdownTrigger>
+            <DropdownMenu aria-label='Profile Actions' variant='flat'>
+              <DropdownItem key='profile' className='h-14 gap-2'>
+                <p className='font-semibold'>Signed in as</p>
+                <p className='font-semibold'>{session.user?.email}</p>
+              </DropdownItem>
+              <DropdownItem
+                key='logout'
+                color='danger'
+                onClick={() => signOut({ callbackUrl: currentPath })}
+              >
+                Log Out
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        ) : (
+          <NavbarItem className='hidden lg:flex'>
+            <Link href={`/login?redirect=${currentPath}`}>Login</Link>
+          </NavbarItem>
+        )}
       </NavbarContent>
     </Navbar>
   );

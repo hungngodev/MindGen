@@ -1,12 +1,19 @@
 'use client';
+import googleLogo from '@/public/google.png';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
-import googleLogo from '@/public/google.png';
+import { useSearchParams } from 'next/navigation';
 
-export function GoogleSignInButton() {
-  const handleClick = () => {
-    signIn('google');
-  };
+function GoogleSignIn() {
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect');
+  console.log(redirect);
+
+  function handleClick() {
+    signIn('google', {
+      callbackUrl: redirect || '/',
+    });
+  }
   return (
     <button
       onClick={handleClick}
@@ -17,3 +24,5 @@ export function GoogleSignInButton() {
     </button>
   );
 }
+
+export default GoogleSignIn;

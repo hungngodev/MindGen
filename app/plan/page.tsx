@@ -16,6 +16,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import React, { useEffect } from 'react';
 import { LampContainer } from '@/components/ui/lamb';
+import { useSession } from 'next-auth/react';
 
 const ExcalidrawWrapper = dynamic(
   async () => (await import('@/components/excalidraw')).default,
@@ -50,6 +51,8 @@ function Plan() {
   const [buttonToScroll, setButtonToScroll] = React.useState(false);
   const { data, status } = useQuery(chatHistoryQuery);
   const [mindMapData, setMindMapData] = React.useState<string>('');
+  const [initialLoad, setInitialLoad] = React.useState(true);
+  const { data: session } = useSession();
   const [chat, setChat] = React.useState<ChatBubble[]>(
     status === 'success' ? data.history : []
   );
@@ -75,6 +78,7 @@ function Plan() {
   }, [status]);
 
   useEffect(() => {
+    if (initialLoad) return;
     scrollToBottom();
     setButtonToScroll(false);
   }, [chat]);
@@ -140,7 +144,10 @@ function Plan() {
           },
         }}
         viewport={{ once: true }}
-        onAnimationComplete={() => scrollToBottom()}
+        onAnimationComplete={() => {
+          setInitialLoad(false);
+          scrollToBottom();
+        }}
         className='w-full'
       >
         <LampContainer>
@@ -166,7 +173,7 @@ function Plan() {
           ref={messageContainerRef}
         >
           <AnimatePresence>
-            {buttonToScroll && (
+            {!initialLoad && buttonToScroll && (
               <button
                 className='absolute -right-7 bottom-10 z-50'
                 onClick={scrollToBottom}
@@ -231,9 +238,17 @@ function Plan() {
                 )}
               >
                 <Image
-                  src={chat.role === 'user' ? user : logo}
+                  src={
+                    chat.role === 'user'
+                      ? session
+                        ? (session.user?.image as string)
+                        : user
+                      : logo
+                  }
                   alt='avatar'
-                  className='h-[50px] w-[50px] rounded-full'
+                  width={40}
+                  height={40}
+                  className='rounded-full'
                 />
                 <div
                   className={cn(
