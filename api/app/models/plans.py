@@ -1,9 +1,11 @@
 from app.extensions import db
 from sqlalchemy.sql import func
-from sqlalchemy import Integer, String, Text, Column, ForeignKey, Float, DateTime, List
+from sqlalchemy import Integer, String, Text, Column, ForeignKey, Float, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from api.app.models.logs import Log
+from typing import List, TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from api.app.models.logs import Log
 
 class Plan(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)

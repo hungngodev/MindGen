@@ -25,7 +25,7 @@ system ={
     # 4. Without the ```mermaid tag```
     # 5. It has to be a flowchart LR diagram
 
-async def planGenerated(planData):
+async def planOpenAIRequest(planData):
     response =  client.chat.completions.create(
         model="gpt-4o",
         messages=[
