@@ -28,3 +28,8 @@ Gọi AI, trả về nội dung, generate ra hình MindMap, hiển thị trên C
 Nội dung chatGPT cho UI: https://chatgpt.com/share/994ec635-4ac4-4584-a033-e915d3b682fd
 Anh note lại bổ sung thêm thêm phần lưu database nhé.
 Mình sẽ cần tối thiểu 2 table, 1 chứa data input, 1 chứa log request (số token, cost,…)
+
+todo:
+login system
+map auto completioin
+UI change heading , navbar, more

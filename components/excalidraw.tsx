@@ -20,7 +20,6 @@ const ExcalidrawWrapper: React.FC<ExcalidrawWrapperProps> = ({
   const init = async () => {
     if (mindmapData === '') return;
     try {
-      console.log(mindmapData);
       const { elements } = await parseMermaidToExcalidraw(
         parsePlanUML(mindmapData),
         {

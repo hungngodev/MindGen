@@ -38,5 +38,4 @@ async def planGenerated(planData):
         frequency_penalty=0,
         presence_penalty=0
     )
-    planGenerated = response.choices[0].message.content
-    return planGenerated
+    return response

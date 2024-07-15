@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Stage, Layer, Rect, Text, Arrow } from 'react-konva';
-import { parsePlanUml } from '@/utils/uml';
 
 interface MindMapNode {
   name: string;
