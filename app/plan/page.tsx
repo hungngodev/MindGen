@@ -167,7 +167,7 @@ function Plan() {
       </motion.div>
 
       <div className='relative flex h-full w-[90%] flex-col items-center gap-3'>
-        <div className='absolute top-0 h-[1rem] w-full bg-white blur-lg dark:bg-black' />
+        <div className='absolute top-0 z-10 h-[1rem] w-full bg-white blur-lg dark:bg-black' />
         <div
           className='relative flex h-[70vh] w-full flex-col items-center overflow-y-auto'
           ref={messageContainerRef}
