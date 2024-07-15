@@ -1,4 +1,5 @@
 'use client';
+
 import logo from '@/assets/images/logo.png';
 import user from '@/assets/images/user.png';
 import { VanishInput } from '@/components/ui';
@@ -14,6 +15,7 @@ import {
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import React, { useEffect } from 'react';
+import { LampContainer } from '@/components/ui/lamb';
 
 const ExcalidrawWrapper = dynamic(
   async () => (await import('@/components/excalidraw')).default,
@@ -53,7 +55,11 @@ function Plan() {
   );
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+      inline: 'nearest',
+    });
   };
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
@@ -119,15 +125,44 @@ function Plan() {
   ];
 
   return (
-    <div className='mx-auto w-[80vw] rounded-none bg-white p-4 shadow-input dark:bg-black md:rounded-2xl md:p-8'>
-      <div className='flex h-[20vh] flex-col items-center justify-center px-4'>
-        <h2 className='text-center text-xl text-black dark:text-white sm:text-5xl'>
-          Share your Plan
-        </h2>
-      </div>
-      <div className='relative h-full w-full'>
+    <div className='mx-auto flex h-full w-full flex-col items-center rounded-none bg-white p-8 shadow-input dark:bg-black md:rounded-2xl'>
+      <motion.div
+        initial={{ opacity: 1, height: 'auto' }}
+        whileInView={{ opacity: 0, height: 0 }}
+        transition={{
+          opacity: {
+            duration: 0.5,
+            delay: 1.8,
+          },
+          height: {
+            duration: 1,
+            delay: 2,
+          },
+        }}
+        viewport={{ once: true }}
+        onAnimationComplete={() => scrollToBottom()}
+        className='w-full'
+      >
+        <LampContainer>
+          <motion.h1
+            initial={{ opacity: 0.5, y: 100 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              delay: 0.3,
+              duration: 0.8,
+              ease: 'easeInOut',
+            }}
+            className='mt-8 bg-gradient-to-br from-slate-300 to-slate-500 bg-clip-text py-4 text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl'
+          >
+            Build plans <br /> the right way
+          </motion.h1>
+        </LampContainer>
+      </motion.div>
+
+      <div className='relative flex h-full w-[90%] flex-col items-center gap-3'>
+        <div className='absolute top-0 h-[1rem] w-full bg-white blur-lg dark:bg-black' />
         <div
-          className='flex h-[70vh] w-full flex-col items-center overflow-y-auto'
+          className='relative flex h-[70vh] w-full flex-col items-center overflow-y-auto'
           ref={messageContainerRef}
         >
           <AnimatePresence>
@@ -146,6 +181,7 @@ function Plan() {
                   strokeWidth='2'
                   strokeLinecap='round'
                   strokeLinejoin='round'
+                  color={'currentColor'}
                 >
                   <motion.circle
                     initial={{ pathLength: 0 }}
@@ -201,10 +237,8 @@ function Plan() {
                 />
                 <div
                   className={cn(
-                    'max-w-[85%] rounded-xl p-2 text-white dark:text-black',
-                    chat.role === 'user'
-                      ? 'bg-teal-400 p-2 dark:bg-sky-700'
-                      : 'bg-teal-500 p-2 dark:bg-sky-800'
+                    'max-w-[85%] rounded-xl p-2 text-white',
+                    chat.role === 'user' ? 'bg-sky-400 p-2' : 'bg-sky-500 p-2'
                   )}
                 >
                   {chat.content === 'loadingggg' ? (

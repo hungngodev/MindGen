@@ -35,7 +35,6 @@ const ExcalidrawWrapper: React.FC<ExcalidrawWrapperProps> = ({
       // Render elements and files on Excalidraw
     } catch (e) {
       // Parse error, displaying error message to users
-      console.error(e);
     }
   };
   useEffect(() => {
@@ -46,7 +45,7 @@ const ExcalidrawWrapper: React.FC<ExcalidrawWrapperProps> = ({
   }, [mindmapData, excalidrawAPI]);
 
   return (
-    <div className='h-[80vh] w-[75vw]'>
+    <div className='my-excalidraw h-[80vh] w-full rounded-large'>
       <Excalidraw excalidrawAPI={(api) => setExcalidrawAPI(api)} />
     </div>
   );

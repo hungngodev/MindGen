@@ -10,6 +10,10 @@ const nextConfig = {
   rewrites: async () => {
     return [
       {
+        source: '/api/auth/:path*',
+        destination: '/api/auth/:path*',
+      },
+      {
         source: '/api/:path*',
         destination:
           process.env.NODE_ENV === 'development'
