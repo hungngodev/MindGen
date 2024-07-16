@@ -2,22 +2,22 @@ from app.plans import bp
 from app.extensions import db
 from flask import jsonify, redirect, request, current_app
 from app.services.OpenAI import planOpenAIRequest
-from app.models.plans import Plan
-from sqlalchemy import desc
-from app.models.logs import Log
+from sqlalchemy import desc,asc
 from dotenv import load_dotenv
 import os
 from datetime import datetime
+import uuid
 load_dotenv()
 
-@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/generated', methods=['GET', 'POST'])
 async def index():
+
+    Plan = current_app.config['myPlan']
+    Log = current_app.config['myLog']
+    
     if request.method == 'GET':
-        current_app.logger.info(request.cookies)
-        for i in request.cookies:
-            current_app.logger.info(f"Cookie: {i} = {request.cookies[i]}")
         current_app.logger.info('GET all chat history')
-        plans = Plan.query.order_by(desc(Plan.created_at)).all()
+        plans =db.session.query(Plan).order_by(asc(Plan.created_at)).all()
         history = []
         for plan in plans:
             history.append({"content": plan.content, "role": plan.role})
@@ -25,18 +25,19 @@ async def index():
     elif request.method == 'POST':
         jsonData = request.get_json()
         planData = jsonData['plan']
-        newUserPlan = Plan(content=planData, role="user")
-        newInputLog = Log(input=planData, output="processing", model="gpt-4o", type="chat.completions.processing")
+        newUserPlan = Plan(content=planData, role="user" , id = str(uuid.uuid4())  )
+        newInputLog = Log( id = str(uuid.uuid4()) , input=planData, output="processing", model="gpt-4o", type="chat.completions.processing")
         inputTimeStamp = datetime.now()
-        newUserPlan.logs.append(newInputLog)
+        newUserPlan.log_collection.append(newInputLog)
         db.session.add(newUserPlan)
         db.session.commit()
         
         planResponse = await planOpenAIRequest(planData)
         planGenerated = planResponse.choices[0].message.content
-        newBotPlan = Plan(content=planGenerated, role="bot")
+        newBotPlan = Plan(id = str(uuid.uuid4()) ,content=planGenerated, role="bot")
 
         newOutputLog = Log(
+             id = str(uuid.uuid4()) ,
                 input = planData,
                 output= planGenerated,
                  model= "gpt-4o",
@@ -47,7 +48,7 @@ async def index():
                  cost = planResponse.usage.prompt_tokens * float(os.getenv("OPENAI_INPUT_COST")) + planResponse.usage.completion_tokens * float(os.getenv("OPENAI_OUTPUT_COST"))
         )
         
-        newUserPlan.logs.append(newOutputLog)
+        newUserPlan.log_collection.append(newOutputLog)
         db.session.add(newBotPlan)
         db.session.commit()
         return jsonify({"message": planGenerated})

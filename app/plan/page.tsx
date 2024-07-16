@@ -5,7 +5,7 @@ import user from '@/assets/images/user.png';
 import { VanishInput } from '@/components/ui';
 import { cn } from '@/utils/cn';
 import { Spinner } from '@nextui-org/react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   AnimatePresence,
   motion,
@@ -28,7 +28,7 @@ const ExcalidrawWrapper = dynamic(
 const chatHistoryQuery = {
   queryKey: ['chatHistory'],
   queryFn: async () => {
-    const response = await fetch('/api/plan', {
+    const response = await fetch('/api/plan/generated', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -54,6 +54,7 @@ function Plan() {
   const [mindMapData, setMindMapData] = React.useState<string>('');
   const [initialLoad, setInitialLoad] = React.useState(true);
   const { data: session } = useSession();
+  const queryClient = useQueryClient();
   const [chat, setChat] = React.useState<ChatBubble[]>(
     status === 'success' ? data.history : []
   );
@@ -92,7 +93,7 @@ function Plan() {
     setChat(newChat);
     setChat([...newChat, { content: 'loadingggg', role: 'bot' }]);
     setBotThinking(true);
-    const response = await fetch('/api/plan', {
+    const response = await fetch('/api/plan/generated', {
       method: 'POST',
       body: JSON.stringify({ plan: planData }),
       headers: {
@@ -100,6 +101,9 @@ function Plan() {
       },
     });
     const data = await response.json();
+    queryClient.invalidateQueries({
+      queryKey: ['chatHistory'],
+    });
     setChat([...newChat, { content: data.message, role: 'bot' }]);
     setBotThinking(false);
     setMindMapData(data.message);
