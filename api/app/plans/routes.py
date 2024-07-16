@@ -13,6 +13,10 @@ load_dotenv()
 @bp.route('/', methods=['GET', 'POST'])
 async def index():
     if request.method == 'GET':
+        current_app.logger.info(request.cookies)
+        for i in request.cookies:
+            current_app.logger.info(f"Cookie: {i} = {request.cookies[i]}")
+        current_app.logger.info('GET all chat history')
         plans = Plan.query.order_by(desc(Plan.created_at)).all()
         history = []
         for plan in plans:

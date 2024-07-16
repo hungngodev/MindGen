@@ -1,27 +1,25 @@
 'use client';
-import React from 'react';
+import VNGLogo from '@/public/logoVNG.png';
 import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Link,
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Link,
-  DropdownItem,
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
-  Avatar,
-  Switch,
   Spinner,
+  Switch,
 } from '@nextui-org/react';
-import VNGLogo from '@/public/logoVNG.png';
+import { Moon, Sun } from 'lucide-react';
+import { signOut, useSession } from 'next-auth/react';
+import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useTheme } from 'next-themes';
-import { Moon, Sun } from 'lucide-react';
-import { useSession } from 'next-auth/react';
-import { signOut } from 'next-auth/react';
-import { stat } from 'fs';
+import { useEffect } from 'react';
+import { redirect } from 'next/navigation';
 
 export default function CustomNav() {
   const currentPath = usePathname();
@@ -41,6 +39,14 @@ export default function CustomNav() {
   };
   const { data: session, status } = useSession();
   console.log(status);
+  useEffect(() => {
+    if (status === 'authenticated' && currentPath === '/login') {
+      return redirect('/');
+    }
+    if (status === 'unauthenticated' && currentPath !== '/login') {
+      signOut({ callbackUrl: `/login?redirect=${currentPath}` });
+    }
+  }, [status, currentPath]);
 
   return (
     <Navbar className='w-full bg-slate-200 shadow-lg dark:bg-zinc-800'>

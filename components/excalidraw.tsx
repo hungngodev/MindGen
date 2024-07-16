@@ -7,6 +7,7 @@ import { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types';
 import { parseMermaidToExcalidraw } from '@excalidraw/mermaid-to-excalidraw';
 import { useEffect, useState } from 'react';
 import { parsePlanUML } from '@/utils/diagram-parser';
+import { useTheme } from 'next-themes';
 
 interface ExcalidrawWrapperProps {
   mindmapData: string;
@@ -17,6 +18,7 @@ const ExcalidrawWrapper: React.FC<ExcalidrawWrapperProps> = ({
 }) => {
   const [excalidrawAPI, setExcalidrawAPI] =
     useState<ExcalidrawImperativeAPI | null>(null);
+  const { theme } = useTheme();
   const init = async () => {
     if (mindmapData === '') return;
     try {
@@ -46,7 +48,10 @@ const ExcalidrawWrapper: React.FC<ExcalidrawWrapperProps> = ({
 
   return (
     <div className='my-excalidraw h-[80vh] w-full rounded-large'>
-      <Excalidraw excalidrawAPI={(api) => setExcalidrawAPI(api)} />
+      <Excalidraw
+        theme={theme === 'dark' ? 'dark' : 'light'}
+        excalidrawAPI={(api) => setExcalidrawAPI(api)}
+      />
     </div>
   );
 };

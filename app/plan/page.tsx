@@ -34,6 +34,7 @@ const chatHistoryQuery = {
         'Content-Type': 'application/json',
       },
     });
+
     return response.json();
   },
 };

@@ -3,6 +3,7 @@ import googleLogo from '@/public/google.png';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 function GoogleSignIn() {
   const searchParams = useSearchParams();

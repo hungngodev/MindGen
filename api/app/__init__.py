@@ -12,6 +12,7 @@ def create_app(config_class=Config):
     # Initialize Flask extensions here
     db.init_app(app)
     
+    
     from app.models.plans import Plan
     # Register blueprints here
     from app.main import bp as main_bp
