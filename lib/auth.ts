@@ -14,6 +14,9 @@ export const authConfig = {
     }),
     // ...add more providers here
   ],
+  session: {
+    strategy: 'jwt',
+  },
   adapter: PrismaAdapter(prisma) as Adapter,
   secret: process.env.NEXT_AUTH_SECRET,
 };

@@ -26,6 +26,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # vercel
 .vercel
@@ -38,3 +39,4 @@ __pycache__
 /api/venv
 /api/__pycache__
 /api/.env
+/api/.env.local
