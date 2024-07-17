@@ -1,7 +1,6 @@
 import { withAuth } from 'next-auth/middleware';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import { decode } from 'next-auth/jwt';
 
 export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.includes('auth')) {
@@ -18,24 +17,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  const response = NextResponse.rewrite(url);
-  const cookie = headers.get('cookie');
-  console.log(cookie);
-  const sessionToken = cookie
-    ?.split(';')
-    .find((c) => c.trim().startsWith('next-auth.session-token'))
-    ?.split('=')[1];
-
-  const decoded = await decode({
-    token: sessionToken,
-    secret: process.env.NEXT_AUTH_SECRET || '',
-  });
-  console.log(decoded);
-  response.headers.set(
-    'Cookie',
-    `username=hello` + (cookie ? `; ${cookie}` : '')
-  );
-  return response;
+  return NextResponse.rewrite(url);
 }
 
 export default withAuth(middleware, {

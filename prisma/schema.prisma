@@ -1,6 +1,6 @@
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL_PRISMA")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
  
 generator client {
@@ -10,18 +10,21 @@ generator client {
 model User {
   id            String          @id @default(cuid())
   name          String?
+  username      String?         @unique
   email         String?         @unique
   emailVerified DateTime?
   image         String?
+
   accounts      Account[]
   sessions      Session[]
-  plan          Plan[]
-  logs          Log[]
   Authenticator Authenticator[]   // Optional for WebAuthn support
+
+  plans          Plan[] @relation("UserPlan")
+  logs          Log[]   @relation("UserLog")
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
 }
 
 model Plan {
@@ -31,9 +34,9 @@ model Plan {
   created_at DateTime @default(now())
 
   userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation("UserPlan",fields: [userId], references: [id], onDelete: Cascade)
 
-  logs Log[]
+  logs Log[] @relation("PlanLog")
 }
 
 model Log{
@@ -51,23 +54,24 @@ model Log{
   planId String
   userId String
 
-  plan Plan @relation(fields: [planId], references: [id], onDelete: Cascade )
-  user User @relation(fields: [userId], references: [id] , onDelete: Cascade)
+  plan Plan @relation("PlanLog",fields: [planId], references: [id], onDelete: Cascade )
+  user User @relation("UserLog", fields: [userId], references: [id] , onDelete: Cascade)
 }
 
 model Account {
   id                String  @id @default(cuid())
-  userId            String
+  userId            String  @unique
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?
-  access_token      String?
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?
+  id_token          String? @db.Text
   session_state     String?
+  refresh_token_expires_in Int?
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -75,6 +79,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
  
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
  
 model Session {

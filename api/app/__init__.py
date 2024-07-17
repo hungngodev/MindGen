@@ -1,11 +1,15 @@
-from flask import Flask, jsonify, redirect, url_for, request, render_template, session
-from flask_cors import CORS, cross_origin
-from sqlalchemy.ext.automap import automap_base
-from sqlalchemy import MetaData, Integer
-from api.app.config import Config
-from app.extensions import db
-from sqlalchemy.orm import relationship, Mapped, mapped_column
 from typing import List
+from app.extensions import db
+from flask import (Flask, jsonify, redirect, render_template, request, session,
+                   url_for)
+from flask_cors import CORS, cross_origin
+from lib.jwt import get_token
+from sqlalchemy import Integer, MetaData
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from api.app.config import Config
+
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -17,8 +21,11 @@ def create_app(config_class=Config):
     
     def checkAuth():
         app.logger.info('Before request')
-        for i in request.cookies:
-            app.logger.info(f'{i}: {request.cookies[i]}')
+        session_token = request.cookies.get('next-auth.session-token')
+        app.config['session'] = None
+        if session_token:
+            session = get_token(session_token)
+            app.config['session'] = session
             
 
     from app.main import bp as main_bp
@@ -54,10 +61,13 @@ def create_app(config_class=Config):
             # id: Mapped[int] = mapped_column(Integer, primary_key=True)
             # plan: Mapped["Plan"] = relationship("Plan", back_populates="logs")
             pass
-    
+            
+        class User(Base):
+            __tablename__ = 'User'
+            pass
         Base.prepare(db.engine, reflect=True)
 
         app.config['myPlan'] = Plan
         app.config['myLog'] = Log
-
+        app.config['myUser'] = User
     return app

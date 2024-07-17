@@ -14,7 +14,13 @@ async def index():
 
     Plan = current_app.config['myPlan']
     Log = current_app.config['myLog']
+    User = current_app.config['myUser']
     
+    if current_app.config['session']:
+        session = current_app.config['session']
+        user_id = str(session['sub'])
+        currentUser = db.session.get(User, user_id)
+
     if request.method == 'GET':
         current_app.logger.info('GET all chat history')
         plans =db.session.query(Plan).order_by(asc(Plan.created_at)).all()
@@ -25,17 +31,23 @@ async def index():
     elif request.method == 'POST':
         jsonData = request.get_json()
         planData = jsonData['plan']
+        
+        inputTimeStamp = datetime.now()
+        
         newUserPlan = Plan(content=planData, role="user" , id = str(uuid.uuid4())  )
         newInputLog = Log( id = str(uuid.uuid4()) , input=planData, output="processing", model="gpt-4o", type="chat.completions.processing")
-        inputTimeStamp = datetime.now()
+        
         newUserPlan.log_collection.append(newInputLog)
+        currentUser.plan_collection.append(newUserPlan)
+        currentUser.log_collection.append(newInputLog)
+        
         db.session.add(newUserPlan)
         db.session.commit()
         
         planResponse = await planOpenAIRequest(planData)
         planGenerated = planResponse.choices[0].message.content
+        
         newBotPlan = Plan(id = str(uuid.uuid4()) ,content=planGenerated, role="bot")
-
         newOutputLog = Log(
              id = str(uuid.uuid4()) ,
                 input = planData,
@@ -49,6 +61,9 @@ async def index():
         )
         
         newUserPlan.log_collection.append(newOutputLog)
+        currentUser.plan_collection.append(newBotPlan)
+        currentUser.log_collection.append(newOutputLog)
+        
         db.session.add(newBotPlan)
         db.session.commit()
         return jsonify({"message": planGenerated})
