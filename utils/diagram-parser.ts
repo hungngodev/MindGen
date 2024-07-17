@@ -6,6 +6,8 @@ interface MindMapNode {
 
 export const parsePlanUML = (text: string): string => {
   const lines = text
+    .replace(/`/g, '')
+    .replace(/[()]/g, '')
     .split('\n')
     .filter(
       (line) => line.trim() && !line.startsWith('@') && line.includes('*')

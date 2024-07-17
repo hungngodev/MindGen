@@ -3,7 +3,7 @@ import logo from '@/assets/images/logo.png';
 import user from '@/assets/images/user.png';
 import { VanishInput } from '@/components/ui';
 import { cn } from '@/utils/cn';
-import { Spinner } from '@nextui-org/react';
+import { Spinner, Button } from '@nextui-org/react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   AnimatePresence,
@@ -16,6 +16,8 @@ import Image from 'next/image';
 import React, { useEffect } from 'react';
 import { LampContainer } from '@/components/ui/lamb';
 import { useSession } from 'next-auth/react';
+import { CircleArrowOutDownRight } from 'lucide-react';
+import { set } from 'mongoose';
 
 const ExcalidrawWrapper = dynamic(
   async () => (await import('@/components/excalidraw')).default,
@@ -256,19 +258,31 @@ function Plan() {
                 />
                 <div
                   className={cn(
-                    'max-w-[85%] rounded-xl p-2 text-white',
+                    'flex max-w-[85%] flex-col items-end rounded-xl p-2 text-left text-white',
                     chat.role === 'user' ? 'bg-sky-400 p-2' : 'bg-sky-500 p-2'
                   )}
                 >
                   {chat.content === 'loadingggg' ? (
                     <Spinner color='primary' size='lg' />
                   ) : (
-                    chat.content.split('\n').map((line, index) => (
-                      <React.Fragment key={index}>
-                        {line}
-                        <br />
-                      </React.Fragment>
-                    ))
+                    <>
+                      {chat.content.split('\n').map((line, index) => (
+                        <React.Fragment key={index}>
+                          {line}
+                          <br />
+                        </React.Fragment>
+                      ))}
+                      {chat.role === 'bot' && (
+                        <Button
+                          isIconOnly
+                          color='danger'
+                          aria-label='apply'
+                          onClick={() => setMindMapData(chat.content)}
+                        >
+                          <CircleArrowOutDownRight />
+                        </Button>
+                      )}
+                    </>
                   )}
                 </div>
               </motion.div>

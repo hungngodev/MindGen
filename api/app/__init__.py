@@ -3,11 +3,10 @@ from app.extensions import db
 from flask import (Flask, jsonify, redirect, render_template, request, session,
                    url_for)
 from flask_cors import CORS, cross_origin
-from lib.jwt import get_token
+from api.app.services.jwt import get_token
 from sqlalchemy import Integer, MetaData
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from api.app.config import Config
 
 
@@ -37,6 +36,9 @@ def create_app(config_class=Config):
 
     from app.plans import bp as plans_bp
     app.register_blueprint(plans_bp, url_prefix='/api/plan')
+    
+    from app.mindmaps import bp as mindmaps_bp
+    app.register_blueprint(mindmaps_bp, url_prefix='/api/mindmap')
 
     @app.route('/api/test', methods = ['GET', 'POST'])
     def test_page():
@@ -65,9 +67,14 @@ def create_app(config_class=Config):
         class User(Base):
             __tablename__ = 'users'
             pass
+        
+        class MindMap(Base):
+            __tablename__ = 'mindmaps'
+            pass
         Base.prepare(db.engine, reflect=True)
 
         app.config['myPlan'] = Plan
         app.config['myLog'] = Log
         app.config['myUser'] = User
+        app.config['myMindMap']= MindMap
     return app

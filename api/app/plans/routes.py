@@ -11,7 +11,6 @@ load_dotenv()
 
 @bp.route('/generated', methods=['GET', 'POST'])
 async def index():
-
     Plan = current_app.config['myPlan']
     Log = current_app.config['myLog']
     User = current_app.config['myUser']
@@ -71,4 +70,6 @@ async def index():
         db.session.add(newBotPlan)
         db.session.commit()
         return jsonify({"message": planGenerated})
+
+
 
