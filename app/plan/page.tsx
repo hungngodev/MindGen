@@ -1,5 +1,4 @@
 'use client';
-
 import logo from '@/assets/images/logo.png';
 import user from '@/assets/images/user.png';
 import { VanishInput } from '@/components/ui';

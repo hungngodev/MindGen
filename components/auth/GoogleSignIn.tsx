@@ -3,7 +3,7 @@ import googleLogo from '@/public/google.png';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { Button } from '@nextui-org/button';
 
 function GoogleSignIn() {
   const searchParams = useSearchParams();
@@ -16,13 +16,16 @@ function GoogleSignIn() {
     });
   }
   return (
-    <button
+    <Button
+      color='primary'
       onClick={handleClick}
-      className='focus:shadow-outline mt-4 flex h-14 w-full items-center justify-center rounded-lg border-2 border-black bg-white px-6 text-xl font-semibold text-black transition-colors duration-300 hover:bg-slate-200'
+      variant='ghost'
+      startContent={
+        <Image src={googleLogo} alt='Google Logo' width={20} height={20} />
+      }
     >
-      <Image src={googleLogo} alt='Google Logo' width={20} height={20} />
-      <span className='ml-4'>Continue with Google</span>
-    </button>
+      Continue with Google
+    </Button>
   );
 }
 

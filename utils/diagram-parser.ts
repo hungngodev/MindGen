@@ -7,7 +7,9 @@ interface MindMapNode {
 export const parsePlanUML = (text: string): string => {
   const lines = text
     .split('\n')
-    .filter((line) => line.trim() && !line.startsWith('@'));
+    .filter(
+      (line) => line.trim() && !line.startsWith('@') && line.includes('*')
+    );
   const root: MindMapNode = { name: 'root', children: [], id: 'root' };
   const stack: { node: MindMapNode; level: number }[] = [
     { node: root, level: 0 },

@@ -12,7 +12,7 @@ model User {
   name          String?
   username      String?         @unique
   email         String?         @unique
-  emailVerified DateTime?
+  emailVerified DateTime?       @map("email_verified")
   image         String?
 
   accounts      Account[]
@@ -24,46 +24,49 @@ model User {
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
+    @@map("users")
 }
 
 model Plan {
   id String @id @default(cuid())
-  content String
+  content String @db.Text
   role String
   created_at DateTime @default(now())
 
-  userId String
-  user User @relation("UserPlan",fields: [userId], references: [id], onDelete: Cascade)
+  user_id String
+  user User @relation("UserPlan",fields: [user_id], references: [id], onDelete: Cascade)
 
   logs Log[] @relation("PlanLog")
+  @@map("plans")
 }
 
-model Log{
+model Log {
   id String @id @default(cuid())
-  input String
-  output String
+  input String  @db.Text
+  output String @db.Text
   model String
   type String
   created_at DateTime @default(now())
-  inputToken String?
-  outputToken String?
+  input_token String? 
+  output_token String?
   cost Float?
   time_taken Int?
   
-  planId String
-  userId String
+  plan_id String
+  user_id String
 
-  plan Plan @relation("PlanLog",fields: [planId], references: [id], onDelete: Cascade )
-  user User @relation("UserLog", fields: [userId], references: [id] , onDelete: Cascade)
+  plan Plan @relation("PlanLog",fields: [plan_id], references: [id], onDelete: Cascade )
+  user User @relation("UserLog", fields: [user_id], references: [id] , onDelete: Cascade)
+
+  @@map("logs")
 }
 
 model Account {
   id                String  @id @default(cuid())
-  userId            String  @unique
+  userId            String  @unique @map("user_id")
   type              String
   provider          String
-  providerAccountId String
+  providerAccountId String @map("provider_account_id")
   refresh_token     String? @db.Text
   access_token      String? @db.Text
   expires_at        Int?
@@ -73,24 +76,26 @@ model Account {
   session_state     String?
   refresh_token_expires_in Int?
  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
  
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
  
   @@unique([provider, providerAccountId])
   @@index([userId])
+  @@map("accounts")
 }
  
 model Session {
   id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("sessions")
 }
  
 model VerificationToken {
@@ -99,20 +104,22 @@ model VerificationToken {
   expires    DateTime
  
   @@unique([identifier, token])
+  @@map("verification_tokens")
 }
  
 // Optional for WebAuthn support
 model Authenticator {
-  credentialID         String  @unique
+  credentialID         String  @unique @map("credential_id")
   userId               String
-  providerAccountId    String
-  credentialPublicKey  String
+  providerAccountId    String @map("provider_account_id")
+  credentialPublicKey  String @map("credential_public_key")
   counter              Int
-  credentialDeviceType String
-  credentialBackedUp   Boolean
+  credentialDeviceType String @map("credential_device_type")
+  credentialBackedUp   Boolean @map("credential_backed_up")
   transports           String?
  
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
  
   @@id([userId, credentialID])
+  @@map("authenticators")
 }

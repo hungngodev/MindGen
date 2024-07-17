@@ -18,8 +18,8 @@ async def index():
     
     if current_app.config['session']:
         session = current_app.config['session']
-        user_id = str(session['sub'])
-        currentUser = db.session.get(User, user_id)
+        userId = str(session['sub'])
+        currentUser = db.session.get(User, userId)
 
     if request.method == 'GET':
         current_app.logger.info('GET all chat history')
@@ -28,6 +28,7 @@ async def index():
         for plan in plans:
             history.append({"content": plan.content, "role": plan.role})
         return jsonify({"history" :history })
+    
     elif request.method == 'POST':
         jsonData = request.get_json()
         planData = jsonData['plan']
@@ -37,15 +38,15 @@ async def index():
         newUserPlan = Plan(content=planData, role="user" , id = str(uuid.uuid4())  )
         newInputLog = Log( id = str(uuid.uuid4()) , input=planData, output="processing", model="gpt-4o", type="chat.completions.processing")
         
-        newUserPlan.log_collection.append(newInputLog)
-        currentUser.plan_collection.append(newUserPlan)
-        currentUser.log_collection.append(newInputLog)
+        newInputLog.user = currentUser
+        newUserPlan.user = currentUser
+        newInputLog.plan = newUserPlan
         
         db.session.add(newUserPlan)
         db.session.commit()
         
         planResponse = await planOpenAIRequest(planData)
-        planGenerated = planResponse.choices[0].message.content
+        planGenerated = planResponse.choices[0].message.content.replace('```', '').strip()
         
         newBotPlan = Plan(id = str(uuid.uuid4()) ,content=planGenerated, role="bot")
         newOutputLog = Log(
@@ -55,14 +56,17 @@ async def index():
                  model= "gpt-4o",
                  type="chat.completions.processed",
                  time_taken =float((datetime.now() - inputTimeStamp).total_seconds()),
-                 inputToken = planResponse.usage.prompt_tokens,
-                 outputToken = planResponse.usage.completion_tokens,
+                 input_token = planResponse.usage.prompt_tokens,
+                 output_token = planResponse.usage.completion_tokens,
                  cost = planResponse.usage.prompt_tokens * float(os.getenv("OPENAI_INPUT_COST")) + planResponse.usage.completion_tokens * float(os.getenv("OPENAI_OUTPUT_COST"))
         )
         
-        newUserPlan.log_collection.append(newOutputLog)
-        currentUser.plan_collection.append(newBotPlan)
-        currentUser.log_collection.append(newOutputLog)
+        # newUserPlan.log_collection.append(newOutputLog)
+        # currentUser.plan_collection.append(newBotPlan)
+        # currentUser.log_collection.append(newOutputLog)
+        newBotPlan.user = currentUser
+        newOutputLog.user = currentUser
+        newOutputLog.plan = newBotPlan
         
         db.session.add(newBotPlan)
         db.session.commit()

@@ -40,12 +40,12 @@ export default function CustomNav() {
   const { data: session, status } = useSession();
   console.log(status);
   useEffect(() => {
-    // if (status === 'authenticated' && currentPath === '/login') {
-    //   return redirect('/');
-    // }
-    // if (status === 'unauthenticated' && currentPath !== '/login') {
-    //   signOut({ callbackUrl: `/login?redirect=${currentPath}` });
-    // }
+    if (status === 'authenticated' && currentPath === '/login') {
+      return redirect('/');
+    }
+    if (status === 'unauthenticated' && currentPath !== '/login') {
+      signOut({ callbackUrl: `/login?redirect=${currentPath}` });
+    }
   }, [status, currentPath]);
 
   return (

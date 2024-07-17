@@ -6,7 +6,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     SECRET_KEY = os.getenv('FLASK_SECRET') 
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL') 
+    SQLALCHEMY_DATABASE_URI = os.getenv('FLASK_DATABASE_URL') 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     OPENAI_API_KEY = os.getenv('OPENAI_API_KEY') 
     FLASK_APP = os.getenv('FLASK_APP')

@@ -51,19 +51,19 @@ def create_app(config_class=Config):
         db.reflect()
   
         class Plan(Base):
-            __tablename__ = 'Plan'
+            __tablename__ = 'plans'
             # id: Mapped[int] = mapped_column(Integer, primary_key=True)
 #             logs: Mapped[List["Log"]] = relationship(
 #        back_populates="plan", cascade="all, delete-orphan"
 #   )
         class Log(Base):
-            __tablename__ = 'Log'
+            __tablename__ = 'logs'
             # id: Mapped[int] = mapped_column(Integer, primary_key=True)
             # plan: Mapped["Plan"] = relationship("Plan", back_populates="logs")
             pass
             
         class User(Base):
-            __tablename__ = 'User'
+            __tablename__ = 'users'
             pass
         Base.prepare(db.engine, reflect=True)
 
