@@ -18,6 +18,7 @@ def create_app(config_class=Config):
     # Initialize Flask extensions here
     db.init_app(app)
     
+    @app.before_request
     def checkAuth():
         app.logger.info('Before request')
         session_token = request.cookies.get('next-auth.session-token')
@@ -27,12 +28,11 @@ def create_app(config_class=Config):
             app.config['session'] = session
             
 
+            
+
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
 
-    app.before_request_funcs= {
-        'plan': [checkAuth]
-    }
 
     from app.plans import bp as plans_bp
     app.register_blueprint(plans_bp, url_prefix='/api/plan')
@@ -54,25 +54,27 @@ def create_app(config_class=Config):
   
         class Plan(Base):
             __tablename__ = 'plans'
-            # id: Mapped[int] = mapped_column(Integer, primary_key=True)
-#             logs: Mapped[List["Log"]] = relationship(
-#        back_populates="plan", cascade="all, delete-orphan"
 #   )
         class Log(Base):
             __tablename__ = 'logs'
-            # id: Mapped[int] = mapped_column(Integer, primary_key=True)
-            # plan: Mapped["Plan"] = relationship("Plan", back_populates="logs")
-            pass
             
         class User(Base):
             __tablename__ = 'users'
-            pass
-        
+         
         class MindMap(Base):
             __tablename__ = 'mindmaps'
-            pass
-        Base.prepare(db.engine, reflect=True)
 
+        Base.prepare(db.engine, reflect=True)
+        
+        User.logs = relationship('Log', back_populates='user')
+        User.plans = relationship('Plan', back_populates='user')
+        Plan.user = relationship('User', back_populates='plans')
+        Log.user = relationship('User', back_populates='logs')
+        Plan.logs = relationship('Log', back_populates='plan')
+        Log.plan = relationship('Plan', back_populates='logs')
+        User.mindmaps = relationship('MindMap', back_populates='user')
+        MindMap.user = relationship('User', back_populates='mindmaps')
+        
         app.config['myPlan'] = Plan
         app.config['myLog'] = Log
         app.config['myUser'] = User

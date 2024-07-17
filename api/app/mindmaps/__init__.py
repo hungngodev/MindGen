@@ -4,4 +4,4 @@ bp = Blueprint('mindmap', __name__)
 
 
 
-from app.plans import routes
+from app.mindmaps import routes

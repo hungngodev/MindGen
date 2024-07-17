@@ -46,7 +46,7 @@ model MindMap {
   id String @id @default(cuid())
   elements String @db.LongText
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  updated_at DateTime @updatedAt @default(now())
 
   user_id String
   user User @relation("UserMindMap",fields: [user_id], references: [id], onDelete: Cascade)
