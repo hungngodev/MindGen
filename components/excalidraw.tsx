@@ -155,7 +155,22 @@ const ExcalidrawWrapper: React.FC<ExcalidrawWrapperProps> = ({
   function rememberData() {
     console.log('saving data');
     if (topRightUI === 'create') {
-      handleSave(false, currentFile || 'newFile');
+      const appState = excalidrawAPI?.getAppState();
+      const elements = excalidrawAPI?.getSceneElements();
+      if (!elements || !appState) return;
+
+      const saveElements = JSON.stringify(elements);
+      fetch('/api/mindmap/saved', {
+        method: 'POST',
+        body: JSON.stringify({
+          elements: saveElements,
+          newFile: false,
+          fileName: currentFile,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
     } else {
       localStorage.setItem(
         'elements',

@@ -17,6 +17,8 @@
     "@auth/prisma-adapter": "^2.4.1",
     "@excalidraw/excalidraw": "^0.17.6",
     "@excalidraw/mermaid-to-excalidraw": "^1.1.0",
+    "@hello-pangea/dnd": "^16.6.0",
+    "@hookform/resolvers": "^3.9.0",
     "@nextui-org/button": "^2.0.35",
     "@nextui-org/react": "^2.4.3",
     "@prisma/client": "^5.17.0",
@@ -24,6 +26,7 @@
     "@tabler/icons-react": "^3.11.0",
     "@tanstack/react-query": "^5.51.5",
     "@tanstack/react-query-devtools": "^5.51.5",
+    "@tanstack/react-table": "^8.19.3",
     "@types/node": "20.14.11",
     "@types/react-dom": "18.3.0",
     "autoprefixer": "10.4.19",
@@ -40,12 +43,15 @@
     "next-themes": "^0.3.0",
     "plantuml-encoder": "^1.4.0",
     "postcss": "8.4.39",
+    "radix-ui": "^1.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.52.1",
     "react-konva": "^18.2.10",
     "tailwind-merge": "^2.4.0",
     "tailwindcss": "^3.4.6",
-    "typescript": "5.5.3"
+    "typescript": "5.5.3",
+    "zod": "^3.23.8"
   },
   "engines": {
     "node": ">=18.x"
