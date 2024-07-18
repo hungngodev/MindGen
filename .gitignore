@@ -40,3 +40,5 @@ __pycache__
 /api/__pycache__
 /api/.env
 /api/.env.local
+
+/prisma/migrations
