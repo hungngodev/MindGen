@@ -59,10 +59,6 @@ async def index():
                  output_token = planResponse.usage.completion_tokens,
                  cost = planResponse.usage.prompt_tokens * float(os.getenv("OPENAI_INPUT_COST")) + planResponse.usage.completion_tokens * float(os.getenv("OPENAI_OUTPUT_COST"))
         )
-        
-        # newUserPlan.log_collection.append(newOutputLog)
-        # currentUser.plan_collection.append(newBotPlan)
-        # currentUser.log_collection.append(newOutputLog)
         newBotPlan.user = currentUser
         newOutputLog.user = currentUser
         newOutputLog.plan = newBotPlan

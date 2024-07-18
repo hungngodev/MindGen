@@ -108,8 +108,8 @@ function SaveForm({ handleSave }: SaveFormProps) {
                       selectedKeys={[fileName]}
                       isDisabled={disabledSelect}
                     >
-                      {listNames.map((name: string, index: number) => (
-                        <SelectItem key={index} value={name}>
+                      {listNames.map((name: string) => (
+                        <SelectItem key={name} value={name}>
                           {name}
                         </SelectItem>
                       ))}

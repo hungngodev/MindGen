@@ -1,9 +1,10 @@
 'use client';
-import React from 'react';
+import CreateForm from '@/components/create-input';
+import { Select, SelectItem, Skeleton } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { set } from 'mongoose';
 import dynamic from 'next/dynamic';
-import { Select, SelectItem } from '@nextui-org/react';
+import { useEffect, useState } from 'react';
 
 const ExcalidrawWrapper = dynamic(
   async () => (await import('@/components/excalidraw')).default,
@@ -23,51 +24,40 @@ const mindMapsQuery = {
 function page() {
   const { data, status } = useQuery(mindMapsQuery);
   const [selected, setSelected] = useState<string>('');
+  const [excalidrawMounted, setExcalidrawMounted] = useState<boolean>(false);
 
-  if (status === 'pending') {
-    return <div>Loading...</div>;
-  }
   const listFiles: {
     id: string;
     elements: string;
-  }[] = data.history;
+  }[] = status === 'success' ? data.history : [];
+  const listNames = listFiles.map((e: { id: string }) => e.id);
 
-  const listNames = data.history.map((e: { id: string }) => e.id);
-
-  console.log(selected);
   return (
-    <div className='grid h-full w-full grid-cols-3 gap-4'>
-      <div className='col-span-3'>
+    <div className='flex h-full w-full flex-col items-center justify-center gap-4 px-[5vw] py-[5vh]'>
+      <Skeleton isLoaded={status === 'success'} className='h-full w-full'>
+        <CreateForm />
+
         <Select
-          placeholder='Select your files'
-          showScrollIndicators
-          size='lg'
-          selectedKeys={[selected]}
+          value={[selected]}
           onChange={(e) => setSelected(e.target.value)}
+          placeholder={listNames.length ? 'Select a file' : 'No files saved'}
+          isDisabled={!listNames.length}
         >
-          {listNames.map((name: string, index: number) => (
-            <SelectItem key={index} value={name}>
+          {listNames.map((name) => (
+            <SelectItem key={name} value={name}>
               {name}
             </SelectItem>
           ))}
         </Select>
-      </div>
-      {/* {listFiles.map((file: { id: string }) => (
-        <div
-          key={file.id}
-          className='rounded-lg bg-white p-4 shadow-md'
-          onClick={() => setSelected(file.id)}
-        >
-          {file.id}
-        </div>
-      ))} */}
-      <div className='col-span-3'>
-        <ExcalidrawWrapper
-          elements={listFiles.find((e) => e.id === selected)?.elements}
-          currentFile={listFiles.find((e) => e.id === selected)?.id}
-          topRightUI='save'
-        />
-      </div>
+        <Skeleton isLoaded={excalidrawMounted} className='h-[80vh] w-full'>
+          <ExcalidrawWrapper
+            elements={listFiles.find((e) => e.id === selected)?.elements}
+            currentFile={listFiles.find((e) => e.id === selected)?.id}
+            topRightUI='create'
+            setMounted={setExcalidrawMounted}
+          />
+        </Skeleton>
+      </Skeleton>
     </div>
   );
 }

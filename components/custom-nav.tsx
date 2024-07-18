@@ -1,5 +1,5 @@
 'use client';
-import VNGLogo from '@/public/logoVNG.png';
+import VNGLogo from '@/public/mainLogo.png';
 import {
   Dropdown,
   DropdownItem,
@@ -38,7 +38,6 @@ export default function CustomNav() {
     },
   };
   const { data: session, status } = useSession();
-  console.log(status);
   useEffect(() => {
     if (status === 'authenticated' && currentPath === '/login') {
       return redirect('/');
@@ -49,7 +48,7 @@ export default function CustomNav() {
   }, [status, currentPath]);
 
   return (
-    <Navbar className='w-full bg-slate-200 shadow-lg dark:bg-zinc-800'>
+    <Navbar className='w-full border-b border-slate-300 bg-slate-200 shadow-lg dark:border-zinc-700 dark:bg-zinc-800'>
       <NavbarBrand>
         <Image src={VNGLogo} alt='VNG Logo' width={40} height={40} />
         <p className='ml-2 font-bold text-inherit'> MAP-GEN</p>
