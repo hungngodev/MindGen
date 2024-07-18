@@ -37,7 +37,7 @@ export const BooleanNode = <TData, TValue>({
     <motion.div layout className='flex w-full items-start' key={id + 'div'}>
       <motion.div
         layout
-        className='border-accent-foreground flex w-[35vw] items-center justify-around gap-4 rounded-md border border-solid'
+        className='border-accent-foreground flex w-[45vw] items-center justify-around gap-4 rounded-md border border-solid'
       >
         <FormField
           key={id + 'column'}
@@ -51,7 +51,7 @@ export const BooleanNode = <TData, TValue>({
                 defaultValue={field.value}
               >
                 <FormControl>
-                  <SelectTrigger className='w-[12vw] select-none'>
+                  <SelectTrigger className='w-[16vw] select-none'>
                     <SelectValue
                       key={id + 'selectColumnValue'}
                       placeholder='Column'
@@ -69,7 +69,6 @@ export const BooleanNode = <TData, TValue>({
             </FormItem>
           )}
         />
-
         <FormField
           key={id + 'operator'}
           control={control}
@@ -82,7 +81,7 @@ export const BooleanNode = <TData, TValue>({
                 defaultValue={field.value}
               >
                 <FormControl>
-                  <SelectTrigger className='w-[12vw] select-none'>
+                  <SelectTrigger className='w-[16vw] select-none'>
                     <SelectValue
                       key={id + 'selectOperatorValue '}
                       placeholder='Operator'

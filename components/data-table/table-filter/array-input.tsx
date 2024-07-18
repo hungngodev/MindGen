@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { FormControl, FormField, FormItem } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   DragDropContext,
   Draggable,
   Droppable,
   OnDragEndResponder,
-} from "@hello-pangea/dnd";
-import { motion } from "framer-motion";
-import { GripVertical, PlusCircle, XCircle } from "lucide-react";
-import { useFieldArray } from "react-hook-form";
+} from '@hello-pangea/dnd';
+import { motion } from 'framer-motion';
+import { GripVertical, PlusCircle, XCircle } from 'lucide-react';
+import { useFieldArray } from 'react-hook-form';
 
 interface BooleanNodeProps<TData, TValue> {
   id: string;
@@ -41,43 +41,43 @@ export const ArrayInput = <TData, TValue>({
     }
   };
   return (
-    <motion.div layout={!(fieldsInput.length == 0)} className="absolute z-50">
+    <motion.div layout={!(fieldsInput.length == 0)} className='absolute z-50'>
       {openInput && (
         <DragDropContext onDragEnd={handleDrag}>
           <ul>
             <Droppable
               droppableId={`${fieldArrayName}-items`}
-              direction="vertical"
+              direction='vertical'
             >
               {(provided, snapshot) => (
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  className="flex flex-col items-center "
+                  className='flex flex-col items-center'
                 >
                   {fieldsInput.map((inputField, indexInput) => (
                     <Draggable
                       key={
                         `${fieldArrayName}-item-${inputField.id}` + indexInput
                       }
-                      draggableId={"drag" + fieldArrayName + indexInput}
+                      draggableId={'drag' + fieldArrayName + indexInput}
                       index={indexInput}
                     >
                       {(provided, snapshot) => (
                         <li
-                          key={inputField.id + "li"}
+                          key={inputField.id + 'li'}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                         >
                           <motion.div
-                            className="mb-6 flex items-center justify-center gap-2"
+                            className='mb-6 flex items-center justify-center gap-2'
                             layout
-                            animate="open"
-                            whileInView="open"
+                            animate='open'
+                            whileInView='open'
                             viewport={{ once: true }}
-                            exit="collapsed"
+                            exit='collapsed'
                             variants={{
-                              open: { opacity: 1, width: "auto" },
+                              open: { opacity: 1, width: 'auto' },
                               collapsed: { opacity: 0, width: 0 },
                             }}
                             transition={{
@@ -92,28 +92,28 @@ export const ArrayInput = <TData, TValue>({
                                 <FormItem>
                                   <FormControl>
                                     <Input
-                                      className="w-[15vw] flex-1  rounded-md border border-solid border-accent-foreground"
+                                      className='border-accent-foreground w-[15vw] flex-1 rounded-md border border-solid'
                                       key={
-                                        inputField.id + id + "InputFormField"
+                                        inputField.id + id + 'InputFormField'
                                       }
-                                      type="text"
+                                      type='text'
                                       {...field}
-                                      placeholder="Value"
+                                      placeholder='Value'
                                     />
                                   </FormControl>
                                 </FormItem>
                               )}
                             />
                             <XCircle
-                              key={inputField.id + "delete"}
+                              key={inputField.id + 'delete'}
                               className={`size-6 cursor-pointer`}
                               onClick={() => removeInput(indexInput)}
                             />
                             <div
                               {...provided.dragHandleProps}
-                              className="relative z-50"
+                              className='relative z-50'
                             >
-                              <GripVertical className="cursor-move" />
+                              <GripVertical className='cursor-move' />
                             </div>
                           </motion.div>
                         </li>
@@ -126,11 +126,11 @@ export const ArrayInput = <TData, TValue>({
             </Droppable>
           </ul>
           <PlusCircle
-            key={id + "plus"}
-            className={`z-200 relative w-min  max-w-[24px] ${fieldsInput.length === 0 ? "top-[0.6rem]" : "left-20"} cursor-pointer`}
+            key={id + 'plus'}
+            className={`z-200 relative w-min max-w-[24px] ${fieldsInput.length === 0 ? 'top-[0.6rem]' : 'left-20'} cursor-pointer`}
             onClick={() => {
               appendInput({
-                query: "",
+                query: '',
               });
             }}
           />

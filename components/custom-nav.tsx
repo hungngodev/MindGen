@@ -36,6 +36,9 @@ export default function CustomNav() {
     '/saved': {
       name: 'My Saved Plans',
     },
+    admin: {
+      name: 'Admin',
+    },
   };
   const { data: session, status } = useSession();
   useEffect(() => {
