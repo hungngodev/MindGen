@@ -72,8 +72,8 @@ const ExcalidrawWrapper: React.FC<ExcalidrawWrapperProps> = ({
       },
     });
     const json = await response.json();
-    console.log(json);
   };
+  console.log('currentFile', currentFile);
   return (
     <div className='my-excalidraw h-[80vh] w-full rounded-large'>
       <Excalidraw

@@ -22,14 +22,19 @@ const mindMapsQuery = {
 };
 function page() {
   const { data, status } = useQuery(mindMapsQuery);
-  const [selected, setSelected] = useState('');
+  const [selected, setSelected] = useState<string>('');
 
   if (status === 'pending') {
     return <div>Loading...</div>;
   }
-  const listFiles = data.history;
+  const listFiles: {
+    id: string;
+    elements: string;
+  }[] = data.history;
+
   const listNames = data.history.map((e: { id: string }) => e.id);
-  console.log(listFiles);
+
+  console.log(selected);
   return (
     <div className='grid h-full w-full grid-cols-3 gap-4'>
       <div className='col-span-3'>
@@ -58,8 +63,8 @@ function page() {
       ))} */}
       <div className='col-span-3'>
         <ExcalidrawWrapper
-          elements={listFiles[2].elements}
-          currentFile={listFiles[2].id}
+          elements={listFiles.find((e) => e.id === selected)?.elements}
+          currentFile={listFiles.find((e) => e.id === selected)?.id}
           topRightUI='save'
         />
       </div>
