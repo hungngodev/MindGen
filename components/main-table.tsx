@@ -169,7 +169,7 @@ export function DataTable<TData, TValue>({
       </div>
       {generateViewOptions('column', <DataTableViewOptions table={table} />)}
       {generateViewOptions('filter', <DataTableFilter table={table} />)}
-      {/* <div className=''>
+      <div className=''>
         <Table
           style={{
             width: table.getCenterTotalSize(),
@@ -272,7 +272,7 @@ export function DataTable<TData, TValue>({
         <div className='ml-4 space-x-2'>
           <DataTablePagination table={table} />
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }
