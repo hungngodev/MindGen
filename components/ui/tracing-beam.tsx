@@ -31,9 +31,6 @@ export const TracingBeam = ({
   useMotionValueEvent(scrollY, 'change', (latest) => {
     setSvgHeight(latest + 1000);
   });
-  useEffect(() => {
-    console.log(svgHeight);
-  }, [svgHeight]);
 
   const y1 = useSpring(
     useTransform(scrollYProgress, [0, 0.8], [50, svgHeight]),

@@ -8,7 +8,6 @@ import { Button } from '@nextui-org/button';
 function GoogleSignIn() {
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect');
-  console.log(redirect);
 
   function handleClick() {
     signIn('google', {

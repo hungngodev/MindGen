@@ -78,7 +78,6 @@ export function DataTableFilter<TData>({
     }
   };
   const submit = async (data: any) => {
-    console.log(data);
     const response = await fetch(endPoints.filter, {
       method: 'POST',
       body: JSON.stringify({

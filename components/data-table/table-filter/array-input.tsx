@@ -18,6 +18,8 @@ interface BooleanNodeProps<TData, TValue> {
   fieldName: string;
   openInput: boolean;
   fieldArrayName: string;
+  type: string;
+  allowMany: boolean;
 }
 export const ArrayInput = <TData, TValue>({
   id,
@@ -25,6 +27,8 @@ export const ArrayInput = <TData, TValue>({
   fieldArrayName,
   fieldName,
   openInput,
+  type,
+  allowMany,
 }: BooleanNodeProps<TData, TValue>) => {
   const {
     fields: fieldsInput,
@@ -96,7 +100,7 @@ export const ArrayInput = <TData, TValue>({
                                       key={
                                         inputField.id + id + 'InputFormField'
                                       }
-                                      type='text'
+                                      type={type}
                                       {...field}
                                       placeholder='Value'
                                     />
@@ -104,11 +108,14 @@ export const ArrayInput = <TData, TValue>({
                                 </FormItem>
                               )}
                             />
-                            <XCircle
-                              key={inputField.id + 'delete'}
-                              className={`size-6 cursor-pointer`}
-                              onClick={() => removeInput(indexInput)}
-                            />
+                            {allowMany && (
+                              <XCircle
+                                key={inputField.id + 'delete'}
+                                className={`size-6 cursor-pointer`}
+                                onClick={() => removeInput(indexInput)}
+                              />
+                            )}
+
                             <div
                               {...provided.dragHandleProps}
                               className='relative z-50'
@@ -125,15 +132,17 @@ export const ArrayInput = <TData, TValue>({
               )}
             </Droppable>
           </ul>
-          <PlusCircle
-            key={id + 'plus'}
-            className={`z-200 relative w-min max-w-[24px] ${fieldsInput.length === 0 ? 'top-[0.6rem]' : 'left-20'} cursor-pointer`}
-            onClick={() => {
-              appendInput({
-                query: '',
-              });
-            }}
-          />
+          {allowMany && (
+            <PlusCircle
+              key={id + 'plus'}
+              className={`z-200 relative w-min max-w-[24px] ${fieldsInput.length === 0 ? 'top-[0.6rem]' : 'left-20'} cursor-pointer`}
+              onClick={() => {
+                appendInput({
+                  query: '',
+                });
+              }}
+            />
+          )}
         </DragDropContext>
       )}
     </motion.div>

@@ -39,7 +39,6 @@ export function DataTableViewOptions<TData>({
       setColumns(items);
     }
   };
-  console.log(columns);
   return (
     <DragDropContext onDragEnd={handleDrag}>
       <Droppable droppableId='droppable' direction='horizontal'>

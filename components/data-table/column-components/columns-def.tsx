@@ -16,14 +16,39 @@ import { CheckboxIndicator, CustomCheckbox } from '../check-box';
 export type TableDataFormat = {
   status: string;
   email: string;
-  inputToken: string;
-  outputToken: string;
+  inputToken: number;
+  outputToken: number;
   amount: string;
   model: string;
-  createdAt: string;
-  timeTaken: string;
+  createdAt: Date;
+  timeTaken: number;
   id: string;
 };
+
+export const typeMapping = {
+  status: 'text',
+  email: 'text',
+  inputToken: 'number',
+  outputToken: 'number',
+  amount: 'text',
+  model: 'text',
+  createdAt: 'date',
+  timeTaken: 'number',
+  id: 'text',
+} as const;
+
+export const operatorsMapping = {
+  text: ['is', 'is not', 'contains', 'does not contain'],
+  number: ['equal', 'not equal', 'greater than', 'less than'],
+  date: ['is', 'is not', 'after', 'before'],
+} as const;
+
+export const notAllowManyInputs = [
+  'greater than',
+  'less than',
+  'after',
+  'before',
+];
 
 export const columns: ColumnDef<TableDataFormat>[] = [
   {
@@ -87,7 +112,7 @@ export const columns: ColumnDef<TableDataFormat>[] = [
     accessorKey: 'outputToken',
     header: ({ column }) => (
       <DataTableColumnHeader
-        className='w-[10vw]'
+        className='w-[11vw]'
         column={column}
         title='Output Token'
       />
@@ -120,20 +145,6 @@ export const columns: ColumnDef<TableDataFormat>[] = [
     },
   },
   {
-    accessorKey: 'createdAt',
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        className='w-[10vw]'
-        column={column}
-        title='Created At'
-      />
-    ),
-    cell: ({ row }) => {
-      const createdAt = row.getValue('createdAt') as string;
-      return <div className='w-[10vw] font-medium'>{createdAt}</div>;
-    },
-  },
-  {
     accessorKey: 'timeTaken',
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -147,6 +158,20 @@ export const columns: ColumnDef<TableDataFormat>[] = [
       return (
         <div className='font-medium'>{timeTaken ? `${timeTaken}s` : 'N/A'}</div>
       );
+    },
+  },
+  {
+    accessorKey: 'createdAt',
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className='w-[10vw]'
+        column={column}
+        title='Created At'
+      />
+    ),
+    cell: ({ row }) => {
+      const createdAt = row.getValue('createdAt') as string;
+      return <div className='w-[10vw] font-medium'>{createdAt}</div>;
     },
   },
   {
