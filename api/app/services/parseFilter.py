@@ -148,6 +148,6 @@ def build_raw_sql_query(conditions):
         SELECT logs.*, users.email AS user_email
         FROM logs 
         LEFT JOIN users ON logs.user_id = users.id
-        WHERE {where_clause}
+        {where_clause and f"WHERE {where_clause}"}
     """
     return sql_query

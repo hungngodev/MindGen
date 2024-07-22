@@ -39,12 +39,14 @@ interface DataTableProps<TData, TValue> {
   endPoints: {
     filter: string;
   };
+  submitFunction: (data: any) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   endPoints,
+  submitFunction,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -166,7 +168,11 @@ export function DataTable<TData, TValue>({
       {generateViewOptions('column', <DataTableViewOptions table={table} />)}
       {generateViewOptions(
         'filter',
-        <DataTableFilter table={table} endPoints={endPoints} />
+        <DataTableFilter
+          table={table}
+          endPoints={endPoints}
+          submitFunction={submitFunction}
+        />
       )}
       <div className=''>
         <Table

@@ -96,7 +96,7 @@ export const ArrayInput = <TData, TValue>({
                                 <FormItem>
                                   <FormControl>
                                     <Input
-                                      className='border-accent-foreground w-[15vw] flex-1 rounded-md border border-solid'
+                                      className='border-accent-foreground w-[20vw] flex-1 rounded-md border border-solid'
                                       key={
                                         inputField.id + id + 'InputFormField'
                                       }
@@ -135,7 +135,7 @@ export const ArrayInput = <TData, TValue>({
           {allowMany && (
             <PlusCircle
               key={id + 'plus'}
-              className={`z-200 relative w-min max-w-[24px] ${fieldsInput.length === 0 ? 'top-[0.6rem]' : 'left-20'} cursor-pointer`}
+              className={`z-200 relative w-min max-w-[24px] ${fieldsInput.length === 0 ? 'top-[0.6rem]' : 'left-[10vw]'} cursor-pointer`}
               onClick={() => {
                 appendInput({
                   query: '',

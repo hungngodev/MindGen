@@ -1,27 +1,37 @@
 'use client';
-import {
-  TableDataFormat,
-  columns,
-} from '@/components/data-table/column-components/columns-def';
+import { columns } from '@/components/data-table/column-components/columns-def';
 import { DataTable } from '@/components/main-table';
-import { useQuery } from '@tanstack/react-query';
 import { Skeleton } from '@nextui-org/react';
+import { useQuery } from '@tanstack/react-query';
+import React from 'react';
 
-const tableQuery = {
-  queryKey: ['table'],
+const tableQuery = (query: string) => ({
+  queryKey: ['table', query],
   queryFn: async () => {
-    const response = await fetch('/api/admin/statistics', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      '/api/admin/statistics?' +
+        new URLSearchParams({
+          filter: query,
+        }),
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     const json = await response.json();
     return json;
   },
-};
+});
+
 export default function Dashboard() {
-  const { data: tableData, status: tableStatus } = useQuery(tableQuery);
+  const [filter, setFilter] = React.useState<string>('');
+  const { data: tableData, status: tableStatus } = useQuery(tableQuery(filter));
+  const filterFunction = async (data: any) => {
+    const filterJson = JSON.stringify(data);
+    setFilter(filterJson);
+  };
   return (
     <div className='flex h-full w-full items-center justify-center'>
       <div className='flex h-full w-full items-center justify-center p-5'>
@@ -34,6 +44,7 @@ export default function Dashboard() {
             endPoints={{
               filter: '/api/admin/statistics',
             }}
+            submitFunction={filterFunction}
           />
         )}
       </div>

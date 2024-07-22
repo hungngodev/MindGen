@@ -15,6 +15,7 @@ interface DataTableFilterProps<TData> {
   endPoints: {
     filter: string;
   };
+  submitFunction: (data: any) => void;
 }
 const formSchema = z.object({
   or: z.array(
@@ -32,6 +33,7 @@ const formSchema = z.object({
 export function DataTableFilter<TData>({
   table,
   endPoints,
+  submitFunction,
 }: DataTableFilterProps<TData>) {
   const columns = table
     .getAllColumns()
@@ -45,9 +47,8 @@ export function DataTableFilter<TData>({
     },
     resolver: zodResolver(formSchema),
   });
-  const { control, register, handleSubmit, getValues, reset, watch, setValue } =
-    form;
-  const { fields, append, remove, prepend } = useFieldArray({
+  const { control, handleSubmit, getValues, watch } = form;
+  const { fields, append, remove } = useFieldArray({
     control,
     name: 'or',
   });
@@ -78,17 +79,7 @@ export function DataTableFilter<TData>({
     }
   };
   const submit = async (data: any) => {
-    const response = await fetch(endPoints.filter, {
-      method: 'POST',
-      body: JSON.stringify({
-        filter: data,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const json = await response.json();
-    console.log(json);
+    submitFunction(data);
   };
 
   return (
