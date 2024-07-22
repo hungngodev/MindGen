@@ -54,13 +54,13 @@ def get_operator_sql(column_name, operator, value):
     elif operator == 'before':
         return f"{column_name} < {value}"
     elif operator == 'is':
-        return f"{column_name} = {value}"
+        return f"{column_name} = '{value}'"
     elif operator == 'is not':
-        return f"{column_name} != {value}"
+        return f"{column_name} != '{value}'"
     elif operator == 'contains':
-        return f"{column_name} LIKE {value}"
+        return f"{column_name} LIKE '%{value}%'"
     elif operator == 'does not contain':
-        return f"{column_name} NOT LIKE {value}"
+        return f"{column_name} NOT LIKE '%{value}%'"
     else:
         raise ValueError(f"Unsupported operator: {operator}")
 
@@ -119,6 +119,8 @@ def parse_condition_to_sql(condition, table_alias='logs'):
 
         if column_name == 'email':
             db_column_name = 'users.email'
+        elif column_name == 'status':
+            db_column_name = 'logs.type'
         else:
             db_column_name = f"{table_alias}.{db_column_name}"
 
@@ -144,7 +146,7 @@ def build_raw_sql_query(conditions):
     where_clause = parse_condition_to_sql(valid_conditions)
     sql_query = f"""
         SELECT logs.*, users.email AS user_email
-        FROM logs
+        FROM logs 
         LEFT JOIN users ON logs.user_id = users.id
         WHERE {where_clause}
     """

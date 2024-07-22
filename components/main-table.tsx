@@ -117,14 +117,6 @@ export function DataTable<TData, TValue>({
   return (
     <div className='flex h-full w-full flex-col'>
       <div className='relative mx-2 mb-2 mt-4 flex w-full flex-col items-center justify-center gap-4 md:flex-row md:justify-between'>
-        <Input
-          placeholder='Filter emails...'
-          value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('email')?.setFilterValue(event.target.value)
-          }
-          className='max-w-sm text-center md:text-left'
-        />
         <div className='flex w-full items-center justify-center gap-2'>
           <AnimatePresence initial={false}>
             {(table.getIsSomePageRowsSelected() ||

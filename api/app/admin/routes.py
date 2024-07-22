@@ -50,6 +50,7 @@ async def index():
         with engine.connect() as connection:
             queries = build_raw_sql_query(filterData)
             query = text(queries)
+            current_app.logger.info(query)
             logs = connection.execute(query)
             current_app.logger.info("executed")
             
