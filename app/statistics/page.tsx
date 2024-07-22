@@ -11,7 +11,7 @@ const tableQuery = (query: string) => ({
     const response = await fetch(
       '/api/admin/statistics?' +
         new URLSearchParams({
-          filter: query,
+          filter: query != '' ? query : JSON.stringify([]),
         }),
       {
         method: 'GET',

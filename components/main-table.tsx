@@ -116,6 +116,19 @@ export function DataTable<TData, TValue>({
       )}
     </AnimatePresence>
   );
+
+  function rememeberState() {
+    localStorage.setItem('viewOptions', JSON.stringify(currentAccordion));
+  }
+  window.addEventListener('beforeunload', rememeberState);
+  React.useEffect(() => {
+    const viewOptions = localStorage.getItem('viewOptions');
+    console.log(viewOptions);
+    if (viewOptions) {
+      setCurrentAccordion(JSON.parse(viewOptions));
+    }
+  }, []);
+
   return (
     <div className='flex h-full w-full flex-col'>
       <div className='relative mx-2 mb-2 mt-4 flex w-full flex-col items-center justify-center gap-4 md:flex-row md:justify-between'>

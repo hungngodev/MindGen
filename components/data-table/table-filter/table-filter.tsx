@@ -9,6 +9,7 @@ import { DrawingLines, PlusButton, StraightLine } from './line';
 import { NestedBooleanNode } from './nestedBooleanNode';
 import { useEffect, useState } from 'react';
 import { Button } from '@nextui-org/button';
+import { RotateCcw, Sparkle } from 'lucide-react';
 
 interface DataTableFilterProps<TData> {
   table: Table<TData>;
@@ -68,6 +69,17 @@ export function DataTableFilter<TData>({
       ],
     });
   };
+  function remmeberData() {
+    localStorage.setItem('data', JSON.stringify(currentData));
+  }
+  window.addEventListener('beforeunload', remmeberData);
+  useEffect(() => {
+    const data = localStorage.getItem('data');
+    if (data) {
+      const parsedData = JSON.parse(data);
+      form.setValue('or', parsedData);
+    }
+  }, []);
 
   const handleRemove = (index: number) => {
     if (index === fields.length - 1) {
@@ -194,7 +206,19 @@ export function DataTableFilter<TData>({
           <div className='mt-4' onClick={addElement}>
             <PlusButton text={'Or'} />
           </div>
-          <Button type='submit'> apply </Button>
+          <div className='absolute right-10 flex flex-col gap-4'>
+            <Button type='submit' variant='bordered'>
+              <Sparkle /> Apply
+            </Button>
+            <Button
+              variant='bordered'
+              onClick={() => {
+                form.reset();
+              }}
+            >
+              <RotateCcw /> Reset
+            </Button>
+          </div>
         </form>
       )}
     </div>
