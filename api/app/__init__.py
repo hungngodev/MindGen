@@ -39,6 +39,9 @@ def create_app(config_class=Config):
     
     from app.mindmaps import bp as mindmaps_bp
     app.register_blueprint(mindmaps_bp, url_prefix='/api/mindmap')
+    
+    from app.admin import bp as admin_bp
+    app.register_blueprint(admin_bp, url_prefix='/api/admin')
 
     @app.route('/api/test', methods = ['GET', 'POST'])
     def test_page():

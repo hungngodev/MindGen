@@ -34,8 +34,8 @@ const chatHistoryQuery = {
         'Content-Type': 'application/json',
       },
     });
-
-    return response.json();
+    const json = await response.json();
+    return json;
   },
 };
 interface ChatBubble {

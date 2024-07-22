@@ -37,8 +37,6 @@ async def index():
         elementData = jsonData['elements']
         newFile  = jsonData['newFile']
         fileName = jsonData['fileName']
-        current_app.logger.info(newFile)
-        current_app.logger.info(fileName)
         
         findExisting  = db.session.query(MindMap).filter_by(id=fileName).first()
         if not findExisting:

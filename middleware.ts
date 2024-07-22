@@ -26,9 +26,7 @@ export default withAuth(middleware, {
   },
   secret: process.env.NEXT_AUTH_SECRET,
 });
-// This function can be marked `async` if using `await` inside
 
-// See "Matching Paths" below to learn more
 export const config = {
   matcher: '/api/:path*',
 };

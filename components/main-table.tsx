@@ -36,11 +36,13 @@ import * as React from 'react';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  endPoints: {};
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  endPoints,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -168,7 +170,10 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
       {generateViewOptions('column', <DataTableViewOptions table={table} />)}
-      {generateViewOptions('filter', <DataTableFilter table={table} />)}
+      {generateViewOptions(
+        'filter',
+        <DataTableFilter table={table} endPoints={endPoints} />
+      )}
       <div className=''>
         <Table
           style={{

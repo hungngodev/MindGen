@@ -36,7 +36,7 @@ export default function CustomNav() {
     '/saved': {
       name: 'My Saved Plans',
     },
-    admin: {
+    '/statistics': {
       name: 'Admin',
     },
   };

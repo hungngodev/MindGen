@@ -22,7 +22,7 @@ async def index():
 
     if request.method == 'GET':
         current_app.logger.info('GET all chat history')
-        plans =db.session.query(Plan).order_by(asc(Plan.created_at)).all()
+        plans =db.session.query(Plan).order_by(asc(Plan.created_at)).filter_by(user=currentUser).all()
         history = []
         for plan in plans:
             history.append({"content": plan.content, "role": plan.role})

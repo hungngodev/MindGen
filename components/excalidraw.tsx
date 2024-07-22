@@ -165,7 +165,7 @@ const ExcalidrawWrapper: React.FC<ExcalidrawWrapperProps> = ({
         body: JSON.stringify({
           elements: saveElements,
           newFile: false,
-          fileName: currentFile,
+          fileName: currentFile || 'newFile',
         }),
         headers: {
           'Content-Type': 'application/json',

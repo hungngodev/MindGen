@@ -12,13 +12,17 @@ import {
 import { ChevronDown } from 'lucide-react';
 import { ColumnDef } from '@tanstack/react-table';
 import { CheckboxIndicator, CustomCheckbox } from '../check-box';
-// This type is used to define the shape of our data.
 
 export type TableDataFormat = {
-  id: string;
-  amount: number;
-  status: 'pending' | 'processing' | 'success' | 'failed';
+  status: string;
   email: string;
+  inputToken: string;
+  outputToken: string;
+  amount: string;
+  model: string;
+  createdAt: string;
+  timeTaken: string;
+  id: string;
 };
 
 export const columns: ColumnDef<TableDataFormat>[] = [
@@ -63,23 +67,70 @@ export const columns: ColumnDef<TableDataFormat>[] = [
     cell: ({ row }) => <div className='lowercase'>{row.getValue('email')}</div>,
   },
   {
+    accessorKey: 'inputToken',
+    header: () => <div>Input Token</div>,
+    cell: ({ row }) => {
+      const amount = row.getValue('inputToken') as string;
+
+      return <div className='font-medium'>{amount || 'N/A'}</div>;
+    },
+  },
+  {
+    accessorKey: 'outputToken',
+    header: () => <div>Output Token</div>,
+    cell: ({ row }) => {
+      const amount = row.getValue('outputToken') as string;
+
+      return <div className='font-medium'>{amount || 'N/A'} </div>;
+    },
+  },
+  {
     accessorKey: 'amount',
     header: () => <div>Amount</div>,
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('amount'));
+      const amount = row.getValue('amount') as string;
 
       // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(amount);
+      const formatted = amount
+        ? new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+          }).format(parseFloat(amount))
+        : 'N/A';
 
       return <div className='font-medium'>{formatted}</div>;
     },
   },
   {
+    accessorKey: 'model',
+    header: () => <div>Model</div>,
+    cell: ({ row }) => {
+      const amount = parseFloat(row.getValue('model'));
+      return <div className='font-medium'>{amount ? amount : 'N/A'}</div>;
+    },
+  },
+  {
+    accessorKey: 'createdAt',
+    header: () => <div>Created At</div>,
+    cell: ({ row }) => {
+      const createdAt = row.getValue('createdAt') as string;
+      return <div className='font-medium'>{createdAt}</div>;
+    },
+  },
+  {
+    accessorKey: 'timeTaken',
+    header: () => <div>Time Taken</div>,
+    cell: ({ row }) => {
+      const timeTaken = row.getValue('timeTaken') as string;
+      return (
+        <div className='font-medium'>{timeTaken ? `${timeTaken}s` : 'N/A'}</div>
+      );
+    },
+  },
+  {
     id: 'actions',
     enableHiding: false,
+    header: () => <div>Actions</div>,
     cell: ({ row }) => {
       const payment = row.original;
 
