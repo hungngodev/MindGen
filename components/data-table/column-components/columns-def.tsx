@@ -29,16 +29,18 @@ export const columns: ColumnDef<TableDataFormat>[] = [
   {
     id: 'select',
     header: ({ table }) => (
-      <CustomCheckbox
-        id={'select-all'}
-        isChecked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && 'indeterminate')
-        }
-        setIsChecked={(value) => table.toggleAllPageRowsSelected(!!value)}
-      >
-        <CheckboxIndicator />
-      </CustomCheckbox>
+      <div className='w-[3vw]'>
+        <CustomCheckbox
+          id={'select-all'}
+          isChecked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && 'indeterminate')
+          }
+          setIsChecked={(value) => table.toggleAllPageRowsSelected(!!value)}
+        >
+          <CheckboxIndicator />
+        </CustomCheckbox>
+      </div>
     ),
     cell: ({ row }) => (
       <CustomCheckbox
@@ -54,9 +56,9 @@ export const columns: ColumnDef<TableDataFormat>[] = [
   },
   {
     accessorKey: 'status',
-    header: 'Status',
+    header: () => <div className='w-[6vw]'>Status</div>,
     cell: ({ row }) => (
-      <div className='capitalize'>{row.getValue('status')}</div>
+      <div className='w-[6vw] capitalize'>{row.getValue('status')}</div>
     ),
   },
   {
@@ -68,16 +70,28 @@ export const columns: ColumnDef<TableDataFormat>[] = [
   },
   {
     accessorKey: 'inputToken',
-    header: () => <div>Input Token</div>,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className='w-[10vw]'
+        column={column}
+        title='Input Token'
+      />
+    ),
     cell: ({ row }) => {
       const amount = row.getValue('inputToken') as string;
 
-      return <div className='font-medium'>{amount || 'N/A'}</div>;
+      return <div className='w-full font-medium'>{amount || 'N/A'}</div>;
     },
   },
   {
     accessorKey: 'outputToken',
-    header: () => <div>Output Token</div>,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className='w-[10vw]'
+        column={column}
+        title='Output Token'
+      />
+    ),
     cell: ({ row }) => {
       const amount = row.getValue('outputToken') as string;
 
@@ -85,46 +99,62 @@ export const columns: ColumnDef<TableDataFormat>[] = [
     },
   },
   {
-    accessorKey: 'amount',
-    header: () => <div>Amount</div>,
+    accessorKey: 'cost',
+    header: ({ column }) => (
+      <DataTableColumnHeader className='w-[8vw]' column={column} title='Cost' />
+    ),
     cell: ({ row }) => {
-      const amount = row.getValue('amount') as string;
+      const cost = row.getValue('cost') as string;
 
-      // Format the amount as a dollar amount
-      const formatted = amount
+      // Format the cost as a dollar cost
+      const formatted = cost
         ? new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
-          }).format(parseFloat(amount))
+          })
+            .format(parseFloat(cost) * 100)
+            .replace('$', '') + '¢'
         : 'N/A';
 
       return <div className='font-medium'>{formatted}</div>;
     },
   },
   {
-    accessorKey: 'model',
-    header: () => <div>Model</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('model'));
-      return <div className='font-medium'>{amount ? amount : 'N/A'}</div>;
-    },
-  },
-  {
     accessorKey: 'createdAt',
-    header: () => <div>Created At</div>,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className='w-[10vw]'
+        column={column}
+        title='Created At'
+      />
+    ),
     cell: ({ row }) => {
       const createdAt = row.getValue('createdAt') as string;
-      return <div className='font-medium'>{createdAt}</div>;
+      return <div className='w-[10vw] font-medium'>{createdAt}</div>;
     },
   },
   {
     accessorKey: 'timeTaken',
-    header: () => <div>Time Taken</div>,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className='w-[10vw]'
+        column={column}
+        title='Time Taken'
+      />
+    ),
     cell: ({ row }) => {
       const timeTaken = row.getValue('timeTaken') as string;
       return (
         <div className='font-medium'>{timeTaken ? `${timeTaken}s` : 'N/A'}</div>
       );
+    },
+  },
+  {
+    accessorKey: 'model',
+    header: () => <div className='w-[5vw]'>Model</div>,
+    cell: ({ row }) => {
+      const model = row.getValue('model') as string;
+      return <div className='font-medium'>{model ? model : 'N/A'}</div>;
     },
   },
   {
@@ -147,10 +177,9 @@ export const columns: ColumnDef<TableDataFormat>[] = [
               <DropdownItem
                 onClick={() => navigator.clipboard.writeText(payment.id)}
               >
-                Copy payment ID
+                Copy Log ID
               </DropdownItem>
-              <DropdownItem>View customer</DropdownItem>
-              <DropdownItem>View payment details</DropdownItem>
+              <DropdownItem>View user</DropdownItem>
             </DropdownSection>
           </DropdownMenu>
         </Dropdown>

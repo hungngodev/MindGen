@@ -32,8 +32,7 @@ export default function Dashboard() {
             columns={columns}
             data={tableData.tableData}
             endPoints={{
-              get: '/api/statistics',
-              filter: '/api/statistics',
+              filter: '/api/admin/statistics',
             }}
           />
         )}

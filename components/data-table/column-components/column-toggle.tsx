@@ -59,7 +59,7 @@ export function DataTableViewOptions<TData>({
                   {(provided, snapshot) => (
                     <div ref={provided.innerRef} {...provided.draggableProps}>
                       <div
-                        className='hover:bg-muted ustify-center flex cursor-pointer items-center space-x-1 rounded-md border-2 border-foreground p-2 transition-all duration-500'
+                        className='hover:bg-muted flex cursor-pointer items-center justify-center space-x-1 rounded-md border-2 border-foreground p-2 transition-all duration-500'
                         onClick={() =>
                           column.toggleVisibility(!column.getIsVisible())
                         }

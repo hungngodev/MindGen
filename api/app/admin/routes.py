@@ -23,13 +23,14 @@ async def index():
         logs = db.session.query(Log).order_by(asc(Log.created_at)).all()
         tableData = []
         for log in logs:
+            current_app.logger.info(log.model)
             tableData.append({
                 "id": log.id,
                 "status": log.type.split('.')[-1],
                 "email": log.user.email,
                 "inputToken": log.input_token,
                 "outputToken": log.output_token,
-                "amount": log.cost,
+                "cost": log.cost,
                 "model": log.model,
                 "createdAt": datetime.strftime(log.created_at, '%Y-%m-%d %H:%M:%S'),
                 "timeTaken": log.time_taken ,
@@ -39,7 +40,8 @@ async def index():
     
     elif request.method == 'POST':
         jsonData = request.get_json()
-        elementData = jsonData['elements']
+        filterData = jsonData['filter']
+        current_app.logger.info(filterData)
         
 
         return jsonify({"message": "POST method"})

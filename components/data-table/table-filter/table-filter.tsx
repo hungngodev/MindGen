@@ -12,7 +12,9 @@ import { Button } from '@nextui-org/button';
 
 interface DataTableFilterProps<TData> {
   table: Table<TData>;
-  endPoints: {};
+  endPoints: {
+    filter: string;
+  };
 }
 const formSchema = z.object({
   or: z.array(
@@ -27,7 +29,10 @@ const formSchema = z.object({
     })
   ),
 });
-export function DataTableFilter<TData>({ table }: DataTableFilterProps<TData>) {
+export function DataTableFilter<TData>({
+  table,
+  endPoints,
+}: DataTableFilterProps<TData>) {
   const columns = table
     .getAllColumns()
     .filter(
@@ -72,8 +77,17 @@ export function DataTableFilter<TData>({ table }: DataTableFilterProps<TData>) {
       remove(index);
     }
   };
-  const submit = (data: any) => {
+  const submit = async (data: any) => {
     console.log(data);
+    const response = await fetch(endPoints.filter, {
+      method: 'POST',
+      body: JSON.stringify({
+        filter: data,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
   };
 
   return (

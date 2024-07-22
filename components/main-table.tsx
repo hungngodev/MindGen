@@ -36,7 +36,9 @@ import * as React from 'react';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  endPoints: {};
+  endPoints: {
+    filter: string;
+  };
 }
 
 export function DataTable<TData, TValue>({
@@ -224,7 +226,7 @@ export function DataTable<TData, TValue>({
                                 : '',
                           },
                         }}
-                        className={`focus:bordered-none absolute right-0 top-0 flex h-full cursor-col-resize touch-none select-none items-center justify-center`}
+                        className={`focus:bordered-none absolute right-2 top-0 flex h-full cursor-col-resize touch-none select-none items-center justify-center`}
                       >
                         <MoveTableIndicator />
                       </div>
