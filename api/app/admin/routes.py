@@ -6,8 +6,11 @@ from dotenv import load_dotenv
 import os
 from datetime import datetime
 import uuid
+from app.services.parseFilter import build_raw_sql_query
+from sqlalchemy import create_engine, text
 
 load_dotenv()
+engine = create_engine(os.getenv('FLASK_DATABASE_URL'))
 
 @bp.route('/statistics', methods=['GET', 'POST', 'DELETE'])
 async def index():
@@ -41,9 +44,32 @@ async def index():
     elif request.method == 'POST':
         jsonData = request.get_json()
         filterData = jsonData['filter']
+
         current_app.logger.info(filterData)
+        tableData = []
+        with engine.connect() as connection:
+            queries = build_raw_sql_query(filterData)
+            query = text(queries)
+            logs = connection.execute(query)
+            current_app.logger.info("executed")
+            
+            for log in logs:
+      
+                tableData.append({
+                    "id": log.id,
+                    "status": log.type.split('.')[-1],
+                    "email": log.user_email,
+                    "inputToken": log.input_token,
+                    "outputToken": log.output_token,
+                    "cost": log.cost,
+                    "model": log.model,
+                    "createdAt": datetime.strftime(log.created_at, '%Y-%m-%d %H:%M:%S'),
+                    "timeTaken": log.time_taken ,
+                })
+         
+            
+        return jsonify({"tableData": tableData })
         
 
-        return jsonify({"message": "POST method"})
     
  

@@ -106,7 +106,7 @@ export const BooleanNode = <TData, TValue>({
                     />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
+                <SelectContent className='z-10 bg-white dark:bg-black'>
                   {operator.map((op: string) => (
                     <SelectItem key={op} value={op}>
                       {op}

@@ -18,7 +18,7 @@ export type TableDataFormat = {
   email: string;
   inputToken: number;
   outputToken: number;
-  amount: string;
+  cost: number;
   model: string;
   createdAt: Date;
   timeTaken: number;
@@ -30,7 +30,7 @@ export const typeMapping = {
   email: 'text',
   inputToken: 'number',
   outputToken: 'number',
-  amount: 'text',
+  cost: 'number',
   model: 'text',
   createdAt: 'date',
   timeTaken: 'number',

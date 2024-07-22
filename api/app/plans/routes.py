@@ -35,7 +35,7 @@ async def index():
         inputTimeStamp = datetime.now()
         
         newUserPlan = Plan(content=planData, role="user" , id = str(uuid.uuid4())  )
-        newInputLog = Log( id = str(uuid.uuid4()) , input=planData, output="processing", model="gpt-4o", type="chat.completions.processing")
+        newInputLog = Log( id = str(uuid.uuid4()) , input=planData, output="processing", model="gpt-4o", type="processing")
         
         newInputLog.user = currentUser
         newUserPlan.user = currentUser
@@ -53,7 +53,7 @@ async def index():
                 input = planData,
                 output= planGenerated,
                  model= "gpt-4o",
-                 type="chat.completions.processed",
+                 type="processed",
                  time_taken =float((datetime.now() - inputTimeStamp).total_seconds()),
                  input_token = planResponse.usage.prompt_tokens,
                  output_token = planResponse.usage.completion_tokens,
