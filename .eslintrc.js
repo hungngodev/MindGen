@@ -6,7 +6,6 @@ module.exports = {
     project: ['./packages/*/tsconfig.json'],
   },
   plugins: ['@typescript-eslint'],
-  extends: ['prettier', 'prettier/react', 'next'],
   rules: {
     'jsx-a11y/click-events-have-key-events': 0,
     'jsx-a11y/no-static-element-interactions': 0,
