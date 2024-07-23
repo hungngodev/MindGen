@@ -1,30 +1,28 @@
-'use client';
 import googleLogo from '@/public/google.png';
+import { Button } from '@nextui-org/button';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
-import { Button } from '@nextui-org/button';
+import { Suspense } from 'react';
 
-function GoogleSignIn() {
-  const searchParams = useSearchParams();
-  const redirect = searchParams.get('redirect');
-
+function GoogleSignIn({ redirect }: { redirect: string | null }) {
   function handleClick() {
     signIn('google', {
       callbackUrl: redirect || '/',
     });
   }
   return (
-    <Button
-      color='primary'
-      onClick={handleClick}
-      variant='ghost'
-      startContent={
-        <Image src={googleLogo} alt='Google Logo' width={20} height={20} />
-      }
-    >
-      Continue with Google
-    </Button>
+    <Suspense>
+      <Button
+        color='primary'
+        onClick={handleClick}
+        variant='ghost'
+        startContent={
+          <Image src={googleLogo} alt='Google Logo' width={20} height={20} />
+        }
+      >
+        Continue with Google
+      </Button>
+    </Suspense>
   );
 }
 

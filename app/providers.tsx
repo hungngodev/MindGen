@@ -5,12 +5,15 @@ import { NextUIProvider } from '@nextui-org/react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { SessionProvider } from 'next-auth/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Suspense } from 'react';
 
 export function NextUIWrapper({ children }: { children: React.ReactNode }) {
   return (
     <NextUIProvider>
       <NextThemesProvider attribute='class' defaultTheme='dark'>
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider>
+          <Suspense fallback='loading'>{children}</Suspense>
+        </SessionProvider>
       </NextThemesProvider>
     </NextUIProvider>
   );
