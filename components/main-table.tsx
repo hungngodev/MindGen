@@ -4,8 +4,6 @@ import { DataTableViewOptions } from '@/components/data-table/column-components/
 import { DataTablePagination } from '@/components/data-table/pagination';
 import { MoveTableIndicator } from '@/components/data-table/table-filter/line';
 import { DataTableFilter } from '@/components/data-table/table-filter/table-filter';
-import { Button } from '@nextui-org/react';
-import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -14,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Settings2 } from 'lucide-react';
+import { Button } from '@nextui-org/react';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -29,7 +27,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, FileX, Filter, Trash2 } from 'lucide-react';
+import { ChevronDown, FileX, Filter, Settings2, Trash2 } from 'lucide-react';
 
 import * as React from 'react';
 

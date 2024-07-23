@@ -1,8 +1,7 @@
-import { Button } from '@nextui-org/react';
+import { Button, Input } from '@nextui-org/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { FolderPen } from 'lucide-react';
 import { useState } from 'react';
-import { Input } from '@nextui-org/react';
 
 function createForm() {
   const [newFile, setNewFile] = useState<string>('');

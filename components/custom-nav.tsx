@@ -17,9 +17,8 @@ import { Moon, Sun } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { redirect, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-import { redirect } from 'next/navigation';
 
 export default function CustomNav() {
   const currentPath = usePathname();
