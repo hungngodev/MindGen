@@ -52,8 +52,6 @@ const ExcalidrawWrapper: React.FC<ExcalidrawWrapperProps> = ({
       excalidrawAPI?.updateScene({
         elements: convertToExcalidrawElements(elements),
       });
-      console.log('setting excalidraw');
-      // Render elements and files on Excalidraw
     } catch (e) {
       if (topRightUI === 'create') {
         return;
@@ -139,7 +137,6 @@ const ExcalidrawWrapper: React.FC<ExcalidrawWrapperProps> = ({
 
   useEffect(() => {
     if (elements && excalidrawAPI) {
-      console.log('setting elements');
       if (topRightUI === 'create' && currentFile !== prevFile) {
         handleSave(false, prevFile || 'newFile');
       }
@@ -151,7 +148,6 @@ const ExcalidrawWrapper: React.FC<ExcalidrawWrapperProps> = ({
   }, [elements, excalidrawAPI]);
 
   function rememberData() {
-    console.log('saving data');
     if (topRightUI === 'create') {
       const appState = excalidrawAPI?.getAppState();
       const elements = excalidrawAPI?.getSceneElements();
