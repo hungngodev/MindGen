@@ -121,7 +121,6 @@ export function DataTable<TData, TValue>({
   window.addEventListener('beforeunload', rememeberState);
   React.useEffect(() => {
     const viewOptions = localStorage.getItem('viewOptions');
-    console.log(viewOptions);
     if (viewOptions) {
       setCurrentAccordion(JSON.parse(viewOptions));
     }

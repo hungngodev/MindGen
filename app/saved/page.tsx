@@ -20,7 +20,7 @@ const mindMapsQuery = {
     return json;
   },
 };
-function page() {
+function Page() {
   const { data, status } = useQuery(mindMapsQuery);
   const [selected, setSelected] = useState<string>('');
   const [excalidrawMounted, setExcalidrawMounted] = useState<boolean>(false);
@@ -61,4 +61,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

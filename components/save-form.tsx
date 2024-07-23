@@ -125,7 +125,7 @@ function SaveForm({ handleSave }: SaveFormProps) {
                     </Button>
                   </div>
                 ) : (
-                  <p>You don't have any files</p>
+                  <p>You do not have any files</p>
                 )}
               </ModalBody>
               <ModalFooter>

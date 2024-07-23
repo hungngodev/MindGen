@@ -77,13 +77,13 @@ function Plan() {
       if (data.history.length > 0)
         setMindMapData(data.history[data.history.length - 1].content);
     }
-  }, [status]);
+  }, [status, data.history]);
 
   useEffect(() => {
     if (initialLoad) return;
     scrollToBottom();
     setButtonToScroll(false);
-  }, [chat]);
+  }, [chat, initialLoad]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

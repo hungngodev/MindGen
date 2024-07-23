@@ -79,7 +79,7 @@ export function DataTableFilter<TData>({
       const parsedData = JSON.parse(data);
       form.setValue('or', parsedData);
     }
-  }, []);
+  }, [form]);
 
   const handleRemove = (index: number) => {
     if (index === fields.length - 1) {

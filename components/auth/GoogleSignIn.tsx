@@ -3,13 +3,17 @@ import { Button } from '@nextui-org/button';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-function GoogleSignIn({ redirect }: { redirect: string | null }) {
+function GoogleSignIn() {
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect');
   function handleClick() {
     signIn('google', {
       callbackUrl: redirect || '/',
     });
   }
+
   return (
     <Suspense>
       <Button

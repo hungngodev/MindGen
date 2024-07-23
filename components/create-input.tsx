@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { FolderPen } from 'lucide-react';
 import { useState } from 'react';
 
-function createForm() {
+function CreateForm() {
   const [newFile, setNewFile] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const queryClient = useQueryClient();
@@ -50,4 +50,4 @@ function createForm() {
   );
 }
 
-export default createForm;
+export default CreateForm;
