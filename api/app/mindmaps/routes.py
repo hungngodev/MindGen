@@ -15,10 +15,10 @@ load_dotenv()
 async def index():
     User = current_app.config['myUser']
     MindMap = current_app.config['myMindMap']
-    if current_app.config['session']:
-        session = current_app.config['session']
-        userId = str(session['sub'])
-        currentUser = db.session.get(User, userId)
+
+    session = current_app.config['session']
+    userId = str(session['sub'])
+    currentUser = db.session.get(User, userId)
 
     if request.method == 'GET':
         allMindmaps = currentUser.mindmaps

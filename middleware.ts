@@ -6,18 +6,19 @@ export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.includes('auth')) {
     return NextResponse.next();
   }
-  const { nextUrl, headers } = request;
-  const url = nextUrl.clone();
-
   if (process.env.NODE_ENV === 'development') {
+    const { nextUrl } = request;
+    const url = nextUrl.clone();
+
+    console.log('middleware', url.pathname);
     if (url.pathname.startsWith('/api')) {
       url.hostname = '127.0.0.1';
       url.protocol = 'http:';
       url.port = '5328';
+      return NextResponse.rewrite(url);
     }
   }
-
-  return NextResponse.rewrite(url);
+  return NextResponse.next();
 }
 
 export default withAuth(middleware, {

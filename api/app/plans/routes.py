@@ -15,10 +15,9 @@ async def index():
     Log = current_app.config['myLog']
     User = current_app.config['myUser']
     
-    if current_app.config['session']:
-        session = current_app.config['session']
-        userId = str(session['sub'])
-        currentUser = db.session.get(User, userId)
+    session = current_app.config['session']
+    userId = str(session['sub'])
+    currentUser = db.session.get(User, userId)
 
     if request.method == 'GET':
         current_app.logger.info('GET all chat history')
@@ -49,15 +48,15 @@ async def index():
         
         newBotPlan = Plan(id = str(uuid.uuid4()) ,content=planGenerated, role="bot")
         newOutputLog = Log(
-             id = str(uuid.uuid4()) ,
+            id = str(uuid.uuid4()) ,
                 input = planData,
                 output= planGenerated,
-                 model= "gpt-4o",
-                 type="processed",
-                 time_taken =float((datetime.now() - inputTimeStamp).total_seconds()),
-                 input_token = planResponse.usage.prompt_tokens,
-                 output_token = planResponse.usage.completion_tokens,
-                 cost = planResponse.usage.prompt_tokens * float(os.getenv("OPENAI_INPUT_COST")) + planResponse.usage.completion_tokens * float(os.getenv("OPENAI_OUTPUT_COST"))
+                model= "gpt-4o",
+                type="processed",
+                time_taken =float((datetime.now() - inputTimeStamp).total_seconds()),
+                input_token = planResponse.usage.prompt_tokens,
+                output_token = planResponse.usage.completion_tokens,
+                cost = planResponse.usage.prompt_tokens * float(os.getenv("OPENAI_INPUT_COST")) + planResponse.usage.completion_tokens * float(os.getenv("OPENAI_OUTPUT_COST"))
         )
         newBotPlan.user = currentUser
         newOutputLog.user = currentUser

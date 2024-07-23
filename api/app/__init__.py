@@ -26,14 +26,14 @@ def create_app(config_class=Config):
         if session_token:
             session = get_token(session_token)
             app.config['session'] = session
+            app.logger.info('Session token found')
+        else:
+            app.logger.info('Session token not found')
+            return jsonify({"message": "Unauthorized"}), 401
             
-
-            
-
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
-
-
+    
     from app.plans import bp as plans_bp
     app.register_blueprint(plans_bp, url_prefix='/api/plan')
     
