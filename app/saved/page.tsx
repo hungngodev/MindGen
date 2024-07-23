@@ -2,9 +2,8 @@
 import CreateForm from '@/components/create-input';
 import { Select, SelectItem, Skeleton } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
-import { set } from 'mongoose';
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const ExcalidrawWrapper = dynamic(
   async () => (await import('@/components/excalidraw')).default,
