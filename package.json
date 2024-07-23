@@ -36,12 +36,10 @@
     "eslint": "8.0.0",
     "eslint-config-next": "14.2.5",
     "framer-motion": "^11.3.6",
-    "konva": "^9.3.14",
     "lucide-react": "^0.408.0",
     "next": "^14.2.5",
     "next-auth": "^4.24.7",
     "next-themes": "^0.3.0",
-    "plantuml-encoder": "^1.4.0",
     "postcss": "8.4.39",
     "radix-ui": "^1.0.1",
     "react": "^18.3.1",
@@ -57,7 +55,6 @@
     "node": ">=18.x"
   },
   "devDependencies": {
-    "@types/plantuml-encoder": "^1.4.2",
     "@types/react": "^18.3.3",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.5",
