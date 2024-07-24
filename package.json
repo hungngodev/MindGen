@@ -5,8 +5,7 @@
   "scripts": {
     "flask-dev": "FLASK_DEBUG=1 FLASK_APP=api/app FLASK_ENV=development  python3 -m flask --app api/app run -p 5328 --reload",
     "next-dev": "next dev",
-    "flask-source": "bash -c 'source ./api/venv/bin/activate '",
-    "dev": "concurrently \"npm run flask-source\" \"npm run next-dev\" \"npm run flask-dev\"",
+    "dev": "concurrently  \"npm run next-dev\" \"npm run flask-dev\"",
     "build": "next build && pip3 install -r requirements.txt",
     "start": "next start",
     "lint": "next lint",
