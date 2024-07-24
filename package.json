@@ -62,5 +62,8 @@
     "eslint-plugin-prettier": "^5.2.1",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "prisma": "^5.17.0"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
