@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "flask-dev": "FLASK_DEBUG=1 FLASK_APP=api/app FLASK_ENV=development  python3 -m flask --app api/app run -p 5328 --reload",
+    "flask-dev": "FLASK_DEBUG=1  FLASK_ENV=development  python3 -m flask --app api/index run -p 5328",
     "next-dev": "next dev",
     "dev": "concurrently  \"npm run next-dev\" \"npm run flask-dev\"",
-    "build": "next build && pip3 install -r requirements.txt",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --check --ignore-path .gitignore .",
@@ -61,8 +61,5 @@
     "eslint-plugin-prettier": "^5.2.1",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "prisma": "^5.17.0"
-  },
-  "engines": {
-    "node": "20.x"
   }
 }
