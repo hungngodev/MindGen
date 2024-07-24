@@ -1,5 +1,5 @@
 from typing import List
-from app.extensions import db
+from api.app.extensions import db
 from flask import (Flask, jsonify, redirect, render_template, request, session,
                    url_for)
 from flask_cors import CORS, cross_origin
