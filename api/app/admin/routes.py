@@ -1,14 +1,15 @@
-from app.admin import bp
-from app.extensions import db
+from sqlalchemy import create_engine, text
+import json
 from flask import jsonify, redirect, request, current_app
 from sqlalchemy import desc,asc
 from dotenv import load_dotenv
 import os
 from datetime import datetime
 import uuid
-from app.services.parseFilter import build_raw_sql_query
-from sqlalchemy import create_engine, text
-import json
+from api.app.services.parseFilter import build_raw_sql_query
+from api.app.admin import bp
+from api.app.extensions import db
+
 
 load_dotenv()
 engine = create_engine(os.getenv('FLASK_DATABASE_URL'))

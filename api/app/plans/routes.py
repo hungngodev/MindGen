@@ -1,7 +1,7 @@
-from app.plans import bp
-from app.extensions import db
+from api.app.plans import bp
+from api.app.extensions import db
 from flask import jsonify, redirect, request, current_app
-from app.services.OpenAI import planOpenAIRequest
+from api.app.services.OpenAI import planOpenAIRequest
 from sqlalchemy import desc,asc
 from dotenv import load_dotenv
 import os
