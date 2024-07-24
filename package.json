@@ -7,7 +7,7 @@
     "next-dev": "next dev",
     "flask-source": "bash -c 'source ./api/venv/bin/activate '",
     "dev": "concurrently \"npm run flask-source\" \"npm run next-dev\" \"npm run flask-dev\"",
-    "build": "next build",
+    "build": "next build && pip3 install -r requirements.txt",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --check --ignore-path .gitignore .",
