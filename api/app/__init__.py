@@ -8,9 +8,13 @@ from sqlalchemy import Integer, MetaData
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from api.app.config import Config
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 def create_app(config_class=Config):
+    print(os.getenv('FLASK_DATABASE_URL') )
     app = Flask(__name__)
     cors = CORS(app)
     app.config.from_object(config_class)
