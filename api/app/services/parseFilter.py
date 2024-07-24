@@ -1,4 +1,3 @@
-from flask import current_app
 
 type_mapping = {
     'status': 'text',
