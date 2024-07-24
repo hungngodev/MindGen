@@ -77,7 +77,7 @@ function Plan() {
       if (data.history.length > 0)
         setMindMapData(data.history[data.history.length - 1].content);
     }
-  }, [status, data.history]);
+  }, [status]);
 
   useEffect(() => {
     if (initialLoad) return;
