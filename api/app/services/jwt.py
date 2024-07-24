@@ -37,4 +37,3 @@ def get_token(token: str) -> dict[str, Any]:
     payload: dict[str, Any] = json.loads(payload_str)
     
     return payload
-print(get_token("eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..fOSvqHvQWWg5TsiF.wYRvcZVB0TqVZQ4SAkf2mbj7paZS1DRhHE4-D12xsw0cBtHFWDaP-gW6LkzCDDD9Fp6C9ykbVbUN7w2m2kAyaiuKrbLt86zGAJMSHVTZk20FpGLYcHeiy_UzF3mah00gmcTxt9f3BFJbMbRekD-lyzNReeT7YBMccFOYU1YLPgnf0ej4UuKrf0A4C7rchSCzIjgatclcv_FeE57nDxjigC-G1TanQDtxzUa3l-D1EukkFvnMsMpyPLF86oTrnYElZzQ1GsfnQ_i4XA3G3vp2TXoDcUyMJI8ZCzmQuuxAs5jJ7gRt2PJ0GitwHm7dGv-4lOXXEO_sEuwzmpU-M-T4Nd5myFJ4XYD2QQj0XwMw7BG5NLA.BJBktilFFTVQXhT-LPkdNA"))
