@@ -8,13 +8,8 @@ from sqlalchemy import Integer, MetaData
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from api.app.config import Config
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 def create_app(config_class=Config):
-    print(os.getenv('FLASK_DATABASE_URL') )
     app = Flask(__name__)
     cors = CORS(app)
     app.config.from_object(config_class)
@@ -35,16 +30,16 @@ def create_app(config_class=Config):
             app.logger.info('Session token not found')
             return jsonify({"message": "Unauthorized"}), 401
             
-    from app.main import bp as main_bp
+    from api.app.main import bp as main_bp
     app.register_blueprint(main_bp)
     
-    from app.plans import bp as plans_bp
+    from api.app.plans import bp as plans_bp
     app.register_blueprint(plans_bp, url_prefix='/api/plan')
     
-    from app.mindmaps import bp as mindmaps_bp
+    from api.app.mindmaps import bp as mindmaps_bp
     app.register_blueprint(mindmaps_bp, url_prefix='/api/mindmap')
     
-    from app.admin import bp as admin_bp
+    from api.app.admin import bp as admin_bp
     app.register_blueprint(admin_bp, url_prefix='/api/admin')
 
     @app.route('/api/test', methods = ['GET', 'POST'])
