@@ -4,4 +4,4 @@ bp = Blueprint('plan', __name__)
 
 
 
-from app.plans import routes
+from api.app.plans import routes
