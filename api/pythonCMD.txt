@@ -1,1 +1,47 @@
 $ pip freeze > requirements.txt
+gunicorn --bind 0.0.0.0:5238 api.index:gunicorn_app
+pm2 start npm --name nextjs-app -- run start -- -p 3000
+ pm2 list nextjs
+ source venv/bin/activate
+ pgrep -f gunicorn
+ pkill -f gunicorn
+ pm2 stop nextjs-app
+ pm2 start nextjs-app
+ pm2 restart nextjs-app
+ pm2 delete nextjs-app
+
+
+    server {
+    listen 80;
+
+    # Exclude /api/auth routes
+    location ~ ^/api/auth {
+        proxy_pass http://0.0.0.0:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /api/ {
+        proxy_pass http://0.0.0.0:5328/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location / {
+        proxy_pass http://0.0.0.0:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
