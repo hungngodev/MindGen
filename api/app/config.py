@@ -5,6 +5,7 @@ load_dotenv()
 
 
 class Config:
+    print(os.getenv('FLASK_DATABASE_URL') )
     SECRET_KEY = os.getenv('FLASK_SECRET') 
     SQLALCHEMY_DATABASE_URI = os.getenv('FLASK_DATABASE_URL') 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
