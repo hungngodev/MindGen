@@ -7,10 +7,14 @@ pm2 start npm --name nextjs-app -- run start -- -p 3000
  pkill -f gunicorn
  pm2 stop nextjs-app
  pm2 start nextjs-app
- pm2 restart nextjs-app
+pm2 restart nextjs-app --update-env
  pm2 delete nextjs-app
-
-
+source my_env/bin/activate
+source ~/.bashrc
+sudo nano ~/.bashrc
+tar -zcf .next.tar.gz .next
+tar -zxvf .next.tar.gz
+ngrok config add-authtoken $YOUR_AUTHTOKEN
     server {
     listen 80;
 
