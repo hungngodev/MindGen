@@ -43,15 +43,21 @@ def get_operator_sql(column_name, operator, value):
             return f"ABS({value} - ({column_name} * 100)) < 0.005"
         return f"{column_name} = {value}"
     elif operator == 'not equal':
-        return f"{column_name} != {value}"
+        if "cost" in column_name:
+            return f"ABS({value} - ({column_name} * 100)) > 0.005"
+        return f"{column_name} != '{value}'"
     elif operator == 'greater than':
-        return f"{column_name} > {value}"
+        if "cost" in column_name:
+            return f"{value} - ({column_name} * 100)< 0"
+        return f"{column_name} > '{value}'"
     elif operator == 'less than':
-        return f"{column_name} < {value}"
+        if "cost" in column_name:
+            return f"{value} - ({column_name} * 100)> 0"
+        return f"{column_name} < '{value}'"
     elif operator == 'after':
-        return f"{column_name} > {value}"
+        return f"{column_name} > '{value}'"
     elif operator == 'before':
-        return f"{column_name} < {value}"
+        return f"{column_name} < '{value}'"
     elif operator == 'is':
         return f"{column_name} = '{value}'"
     elif operator == 'is not':
@@ -149,4 +155,5 @@ def build_raw_sql_query(conditions):
         LEFT JOIN users ON logs.user_id = users.id
         {where_clause and f"WHERE {where_clause}"}
     """
+    
     return sql_query

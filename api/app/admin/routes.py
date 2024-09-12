@@ -29,6 +29,7 @@ async def index():
         tableData = []
         with engine.connect() as connection:
             queries = build_raw_sql_query(filterData)
+            current_app.logger.info(queries)
             query = text(queries)
             logs = connection.execute(query)
             for log in logs:
@@ -43,38 +44,12 @@ async def index():
                     "model": log.model,
                     "createdAt": datetime.strftime(log.created_at, '%Y-%m-%d %H:%M:%S'),
                     "timeTaken": log.time_taken ,
-                })
-         
-            
+                })   
         return jsonify({"tableData": tableData })
     
-    elif request.method == 'POST':
-        jsonData = request.get_json()
-        filterData = jsonData['filter']
-        tableData = []
-        with engine.connect() as connection:
-            queries = build_raw_sql_query(filterData)
-            query = text(queries)
-            logs = connection.execute(query)
-       
-            
-            for log in logs:
-      
-                tableData.append({
-                    "id": log.id,
-                    "status": log.type.split('.')[-1],
-                    "email": log.user_email,
-                    "inputToken": log.input_token,
-                    "outputToken": log.output_token,
-                    "cost": log.cost,
-                    "model": log.model,
-                    "createdAt": datetime.strftime(log.created_at, '%Y-%m-%d %H:%M:%S'),
-                    "timeTaken": log.time_taken ,
-                })
-         
-            
-        return jsonify({"tableData": tableData })
-        
-
-    
+    if request.method == 'DELETE':
+        filterData = json.loads(request.data)
+        idToDelete = filterData['idToDelete']
+        current_app.logger.info(idToDelete)
+        return jsonify({"message": "Deleted" })
  

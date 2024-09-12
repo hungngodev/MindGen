@@ -38,6 +38,7 @@ interface DataTableProps<TData, TValue> {
     filter: string;
   };
   submitFunction: (data: any) => void;
+  deleteFunction: (data: any) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -45,6 +46,7 @@ export function DataTable<TData, TValue>({
   data,
   endPoints,
   submitFunction,
+  deleteFunction,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -119,6 +121,7 @@ export function DataTable<TData, TValue>({
     localStorage.setItem('viewOptions', JSON.stringify(currentAccordion));
   }
   window.addEventListener('beforeunload', rememeberState);
+
   React.useEffect(() => {
     const viewOptions = localStorage.getItem('viewOptions');
     if (viewOptions) {
@@ -150,6 +153,9 @@ export function DataTable<TData, TValue>({
                 <Button
                   className={`flex cursor-pointer items-center space-x-2 transition-all hover:-translate-y-[1px]`}
                   variant='bordered'
+                  onClick={() => {
+                    deleteFunction(table.getFilteredSelectedRowModel().rows);
+                  }}
                 >
                   {table.getIsAllPageRowsSelected() ? (
                     <FileX className='mr-2 h-4 w-4' />

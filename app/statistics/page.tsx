@@ -28,10 +28,23 @@ const tableQuery = (query: string) => ({
 export default function Dashboard() {
   const [filter, setFilter] = React.useState<string>('');
   const { data: tableData, status: tableStatus } = useQuery(tableQuery(filter));
+
   const filterFunction = async (data: any) => {
     const filterJson = JSON.stringify(data);
     setFilter(filterJson);
   };
+
+  const deleteFunction = async (data: any) => {
+    const idMap = data.map((item: any) => item.original.id);
+    fetch('/api/admin/statistics', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ idToDelete: idMap }),
+    });
+  };
+
   return (
     <div className='flex h-full w-full items-center justify-center'>
       <div className='flex h-full w-full items-center justify-center p-5'>
@@ -45,6 +58,7 @@ export default function Dashboard() {
               filter: '/api/admin/statistics',
             }}
             submitFunction={filterFunction}
+            deleteFunction={deleteFunction}
           />
         )}
       </div>

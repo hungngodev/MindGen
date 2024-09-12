@@ -45,7 +45,7 @@ export default function CustomNav() {
       return redirect('/');
     }
     if (status === 'unauthenticated' && currentPath !== '/login') {
-      signOut({ callbackUrl: `/login?redirect=${currentPath}` });
+      return redirect(`/login?redirect=${currentPath}`);
     }
   }, [status, currentPath]);
 

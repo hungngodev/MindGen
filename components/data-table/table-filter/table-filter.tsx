@@ -73,6 +73,7 @@ export function DataTableFilter<TData>({
     localStorage.setItem('data', JSON.stringify(currentData));
   }
   window.addEventListener('beforeunload', remmeberData);
+
   useEffect(() => {
     const data = localStorage.getItem('data');
     if (data) {
@@ -91,6 +92,7 @@ export function DataTableFilter<TData>({
     }
   };
   const submit = async (data: any) => {
+    localStorage.setItem('data', JSON.stringify(data.or));
     submitFunction(data);
   };
 
@@ -214,6 +216,7 @@ export function DataTableFilter<TData>({
               variant='bordered'
               onClick={() => {
                 form.reset();
+                submitFunction([]);
               }}
             >
               <RotateCcw /> Reset

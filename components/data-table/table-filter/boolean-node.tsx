@@ -43,6 +43,7 @@ export const BooleanNode = <TData, TValue>({
   const type = typeMapping[selected as keyof typeof typeMapping];
   const operator = operatorsMapping[type];
   const [allowMany, setAllowMany] = React.useState<boolean>(true);
+
   return (
     <motion.div layout className='flex w-full items-start' key={id + 'div'}>
       <motion.div
